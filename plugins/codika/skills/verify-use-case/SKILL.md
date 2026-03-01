@@ -116,6 +116,7 @@ codika-helper verify workflow ./workflows/main-workflow.json
 
 | Rule | Severity | What it checks |
 |------|----------|----------------|
+| `CONFIG-EXPORTS` | must | config.ts exports required members. `PROJECT_ID` is optional when `project.json` exists |
 | `CK-INIT` | must | Parent workflows must have a Codika Init node |
 | `CK-SUBMIT` | must | Parent workflows must end with Submit Result / Report Error |
 | `WF-SETTINGS` | must | Workflow settings (errorWorkflow, timezone, executionOrder) |

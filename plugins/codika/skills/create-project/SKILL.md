@@ -30,13 +30,29 @@ codika-helper project create --name "My Project" [options]
 | `--description <desc>` | Project description |
 | `--template-id <id>` | Template ID (defaults to platform default) |
 | `--organization-id <id>` | Organization ID (required for admin keys, derived from org API keys) |
+| `--path <dir>` | Write `project.json` into this directory after creation (links the project to a use case folder) |
 | `--api-url <url>` | Override API URL |
 | `--api-key <key>` | Override API key |
 | `--json` | Output result as JSON |
 
 ## Examples
 
-**Basic project creation:**
+**Create project and save `project.json` in the current directory (recommended):**
+
+```bash
+cd my-use-case
+codika-helper project create --name "Email Automations" --path .
+```
+
+This creates the project on the platform and writes `project.json` (containing the project ID and organization ID from the active profile) into the current directory. The `organizationId` in `project.json` enables automatic profile selection during deployment when you have multiple profiles.
+
+**Create project and link to a specific use case folder:**
+
+```bash
+codika-helper project create --name "Email Automations" --path ./my-use-case
+```
+
+**Without `--path` (just prints the project ID, does not write `project.json`):**
 
 ```bash
 codika-helper project create --name "Email Automations"
@@ -53,7 +69,17 @@ codika-helper project create \
 
 ## Expected Output
 
-**Success:**
+**Success (with --path):**
+
+```
+✓ Project Created Successfully
+
+  Project ID: abc123-def456
+  Request ID: req-789
+  Wrote project.json to /path/to/my-use-case/project.json
+```
+
+**Success (without --path):**
 
 ```
 ✓ Project Created Successfully
@@ -70,7 +96,8 @@ codika-helper project create \
   "data": {
     "projectId": "abc123-def456"
   },
-  "requestId": "req-789"
+  "requestId": "req-789",
+  "projectJsonPath": "/path/to/my-use-case/project.json"
 }
 ```
 
@@ -78,7 +105,7 @@ codika-helper project create \
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "API key is required" | Not authenticated | Run `codika-helper login` (see `setup-codika` skill) |
+| "API key is required" | Not authenticated | Run `codika-helper login` or check `codika-helper whoami` (see `setup-codika` skill) |
 | "Organization ID is required" | Using an admin key without specifying org | Add `--organization-id <id>` |
 | 401 / Unauthorized | Invalid or expired API key | Re-run `codika-helper login` with a valid key |
 | 403 / Forbidden | Key doesn't have project creation permission | Check API key permissions in the dashboard |

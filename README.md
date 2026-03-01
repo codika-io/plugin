@@ -1,36 +1,52 @@
-# Codika Plugins (Public)
+# Codika Marketplace
 
-Claude Code plugin with skills for the `codika-helper` CLI. Install this plugin to let Claude Code agents create projects, deploy use cases, and validate workflows on the [Codika](https://codika.io) platform.
+Public Claude Code plugin marketplace by [Codika](https://codika.io). Install plugins to let Claude Code agents create projects, deploy use cases, and manage workflows on the Codika platform.
 
 ## Quick Start
 
-1. Install the CLI:
-   ```bash
-   npm install -g @codika-io/helper-sdk
-   ```
+### 1. Add the Marketplace
 
-2. Log in with your API key (get one from the Codika dashboard):
-   ```bash
-   codika-helper login
-   ```
+```
+/plugin marketplace add codika-io/codika-marketplace
+```
 
-3. Add this plugin to your Claude Code project:
-   ```bash
-   claude mcp add-plugin codika-plugins-public https://github.com/codika-io/codika-plugins-public
-   ```
+### 2. Install a Plugin
 
-## Skills
+```
+/plugin install codika@codika-marketplace
+```
 
-| Skill | Description |
+### 3. Install the CLI
+
+```bash
+npm install -g @codika-io/helper-sdk
+codika-helper login
+```
+
+## Available Plugins
+
+| Plugin | Description | Skills |
+|--------|-------------|--------|
+| `codika` | CLI skills for creating projects, deploying and validating use cases | `setup-codika`, `create-project`, `deploy-use-case`, `verify-use-case` |
+
+## Plugin: codika
+
+Skills for the `codika-helper` CLI. Once installed, Claude Code agents can:
+
+| Skill | What it does |
 |-------|-------------|
-| `setup-codika` | Install the CLI and authenticate |
-| `create-project` | Create a new project on the platform |
-| `deploy-use-case` | Validate and deploy a use case |
-| `verify-use-case` | Validate workflows without deploying |
+| `codika:setup-codika` | Install the CLI and authenticate |
+| `codika:create-project` | Create a new project on the platform |
+| `codika:deploy-use-case` | Validate and deploy a use case |
+| `codika:verify-use-case` | Validate workflows without deploying |
 
 ## What is Codika?
 
 Codika is a multi-tenant SaaS platform for building, deploying, and managing business process automations powered by n8n workflows. Users describe what they need, AI agents create the workflows, and the platform handles deployment, credential management, and execution tracking.
+
+## Contributing
+
+See `CLAUDE.md` for conventions and instructions on adding new plugins.
 
 ## License
 

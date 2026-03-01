@@ -1,0 +1,17 @@
+{
+  "name": "codika-marketplace",
+  "version": "1.0.0",
+  "description": "Public Claude Code plugin marketplace by Codika",
+  "owner": {
+    "name": "Codika",
+    "email": "team@codika.io"
+  },
+  "plugins": [
+    {
+      "name": "codika",
+      "description": "Skills for the codika-helper CLI — set up auth, create projects, validate and deploy use cases",
+      "source": "./plugins/codika",
+      "category": "developer-tools"
+    }
+  ]
+}
