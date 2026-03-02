@@ -1,10 +1,6 @@
 ---
 name: trigger-workflow
-description: Trigger a deployed Codika workflow and optionally poll for results
-trigger:
-  when: User asks to trigger, run, execute, or test a deployed workflow
-  actions: [trigger, run, execute, test, fire]
-  targets: [workflow, use case, process, automation]
+description: Triggers a deployed Codika workflow and optionally polls for results. Use when the user asks to trigger, run, execute, or test a deployed workflow. Supports inline JSON payloads, file payloads, polling with timeout, and auto-resolves processInstanceId from project.json.
 ---
 
 # Trigger Workflow

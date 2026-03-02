@@ -1,10 +1,6 @@
 ---
 name: setup-codika
-description: Install the codika-helper CLI and authenticate with the Codika platform
-trigger:
-  when: User asks to set up Codika, install the CLI, authenticate, or login
-  actions: [setup, install, login, authenticate, configure]
-  targets: [codika, codika-helper, CLI, authentication]
+description: Installs the codika-helper CLI and authenticates with the Codika platform. Use when the user asks to set up Codika, install the CLI, login, authenticate, check identity, or switch profiles. Automatically activates when a command fails with 'API key is required' or authentication errors.
 ---
 
 # Setup Codika

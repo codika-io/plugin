@@ -1,10 +1,6 @@
 ---
 name: init-use-case
-description: Scaffold a new Codika use case folder with config, workflows, and project setup
-trigger:
-  when: User asks to create, initialize, scaffold, or bootstrap a new use case
-  actions: [init, create, scaffold, bootstrap, new]
-  targets: [use case, process, workflow project]
+description: Scaffolds a new Codika use case folder with config.ts, workflow JSON templates, and version tracking. Use when the user asks to create, initialize, scaffold, or bootstrap a new use case from scratch. Generates HTTP-triggered, schedule-triggered, and sub-workflow templates.
 ---
 
 # Init Use Case

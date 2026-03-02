@@ -1,10 +1,6 @@
 ---
 name: fetch-use-case
-description: Fetch and download a deployed Codika use case from the platform
-trigger:
-  when: User asks to download, fetch, pull, or restore a deployed use case
-  actions: [fetch, download, pull, restore, get]
-  targets: [use case, deployed use case, metadata documents]
+description: Fetches and downloads a deployed Codika use case from the platform with all metadata documents. Use when the user asks to download, fetch, pull, or restore a deployed use case. Supports fetching specific versions and listing documents without downloading.
 ---
 
 # Fetch Use Case

@@ -1,10 +1,6 @@
 ---
 name: create-project
-description: Create a new project on the Codika platform
-trigger:
-  when: User asks to create a new project for deploying use cases
-  actions: [create, new, init]
-  targets: [project, codika project]
+description: Creates a new project on the Codika platform for deploying use cases. Use when the user asks to create a project, set up a new project, or initialize a project before deployment. Projects are required before deploying use cases.
 ---
 
 # Create Project

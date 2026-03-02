@@ -1,10 +1,6 @@
 ---
 name: get-execution
-description: Fetch full n8n workflow execution details for debugging
-trigger:
-  when: User asks to debug, inspect, or get details of a workflow execution
-  actions: [get, fetch, inspect, debug, view]
-  targets: [execution, workflow run, execution details, execution logs]
+description: Fetches full n8n workflow execution details (node-by-node) for debugging. Use when the user asks to debug, inspect, or view a workflow execution. Supports deep sub-workflow traversal and slim output for cleaner debugging.
 ---
 
 # Get Execution

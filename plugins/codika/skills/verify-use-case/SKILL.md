@@ -1,10 +1,6 @@
 ---
 name: verify-use-case
-description: Validate a use case folder or workflow without deploying
-trigger:
-  when: User asks to verify, validate, lint, or check a use case
-  actions: [verify, validate, check, lint, audit]
-  targets: [use case, workflow, use-case structure, config]
+description: Validates a Codika use case folder or single workflow without deploying. Use when the user asks to verify, validate, lint, check, or audit a use case. Supports auto-fix, dry-run, strict mode, and JSON output for CI. Always run before deploying.
 ---
 
 # Verify Use Case
