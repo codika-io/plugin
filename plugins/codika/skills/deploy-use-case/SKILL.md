@@ -1,3 +1,12 @@
+---
+name: deploy-use-case
+description: Validate and deploy a use case to the Codika platform
+trigger:
+  when: User asks to deploy, push, release, or publish a use case to Codika
+  actions: [deploy, push, release, publish, ship]
+  targets: [use case, process, workflow]
+---
+
 # Deploy Use Case
 
 Validate and deploy a use case to the Codika platform. Automatically tracks local versions, archives deployments, and maintains version history.

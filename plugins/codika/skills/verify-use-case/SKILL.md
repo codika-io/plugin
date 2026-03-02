@@ -1,3 +1,12 @@
+---
+name: verify-use-case
+description: Validate a use case folder or workflow without deploying
+trigger:
+  when: User asks to verify, validate, lint, or check a use case
+  actions: [verify, validate, check, lint, audit]
+  targets: [use case, workflow, use-case structure, config]
+---
+
 # Verify Use Case
 
 Validate a use case folder (or single workflow) without deploying.

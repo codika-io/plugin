@@ -1,3 +1,12 @@
+---
+name: setup-codika
+description: Install the codika-helper CLI and authenticate with the Codika platform
+trigger:
+  when: User asks to set up Codika, install the CLI, authenticate, or login
+  actions: [setup, install, login, authenticate, configure]
+  targets: [codika, codika-helper, CLI, authentication]
+---
+
 # Setup Codika
 
 Install the `codika-helper` CLI and authenticate with the Codika platform.
