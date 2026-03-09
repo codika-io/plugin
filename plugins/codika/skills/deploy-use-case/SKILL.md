@@ -50,6 +50,8 @@ my-use-case/
   workflows/
     main-workflow.json
     sub-workflow.json
+  data-ingestion/     # Optional — process-level DI (deployed separately)
+    embedding.json
   version.json        # Auto-managed — tracks local semver (X.Y.Z)
   deployments/        # Auto-managed — deployment archives and version history
     {projectId}/

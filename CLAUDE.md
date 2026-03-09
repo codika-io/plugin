@@ -18,6 +18,8 @@ This is a **marketplace** — it contains multiple independent plugins, each wit
 │           ├── setup-codika/
 │           ├── create-project/
 │           ├── deploy-use-case/
+│           ├── deploy-data-ingestion/
+│           ├── deploy-documents/
 │           └── verify-use-case/
 ├── README.md
 ├── CLAUDE.md
@@ -35,6 +37,8 @@ Skills for the `codika-helper` CLI (`@codika-io/helper-sdk`). Pure documentation
 | `setup-codika` | Install the CLI globally and run `codika-helper login` |
 | `create-project` | Create a project via `codika-helper project create` |
 | `deploy-use-case` | Validate then deploy via `codika-helper verify` + `codika-helper deploy` |
+| `deploy-data-ingestion` | Deploy data ingestion config via `codika-helper deploy process-data-ingestion` |
+| `deploy-documents` | Upload stage documents via `codika-helper deploy documents` |
 | `publish-use-case` | Publish a deployment to production via `codika-helper publish` |
 | `verify-use-case` | Validate workflows via `codika-helper verify use-case` |
 | `init-use-case` | Scaffold a new use case via `codika-helper init` |

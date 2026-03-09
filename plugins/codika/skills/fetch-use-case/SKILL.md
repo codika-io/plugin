@@ -49,6 +49,9 @@ codika-helper get use-case <projectId> [outputPath] [options]
 | Flag | Description |
 |------|-------------|
 | `--version <version>` | Fetch a specific version in `X.Y` format (fetches latest if omitted) |
+| `--with-data-ingestion` | Include data ingestion workflow (default: true) |
+| `--no-data-ingestion` | Exclude data ingestion workflow |
+| `--di-version <version>` | Data ingestion version in `X.Y` format (latest if omitted) |
 | `--list` | List documents only without downloading |
 | `--api-url <url>` | Override API URL |
 | `--api-key <key>` | Override API key |
@@ -76,6 +79,18 @@ codika-helper get use-case my-project-id ./restored --version 1.0
 codika-helper get use-case my-project-id --list
 ```
 
+**Fetch with a specific data ingestion version:**
+
+```bash
+codika-helper get use-case my-project-id ./restored --di-version 1.2
+```
+
+**Fetch without data ingestion:**
+
+```bash
+codika-helper get use-case my-project-id ./restored --no-data-ingestion
+```
+
 **List with JSON output:**
 
 ```bash
@@ -99,28 +114,32 @@ Fetching use case my-project-id...
   ✓ config.ts
   ✓ workflows/main-workflow.json
   ✓ workflows/sub-workflow.json
+  ✓ data-ingestion/embedding-ingestion.json
 
 ✓ Use Case Downloaded Successfully
 
   Project:  my-project-id
   Version:  1.0
+  DI Ver:   1.2
   Output:   ./restored
-  Files:    3 file(s) downloaded
+  Files:    4 file(s) downloaded
 ```
 
 **List mode:**
 
 ```
-✓ Found 3 document(s)
+✓ Found 4 document(s)
 
   Project:      my-project-id
   Version:      1.0
+  DI Version:   1.2
   Organization: org-456
 
   Documents:
     config.ts  (8.1 KB, text/typescript)
     workflows/main-workflow.json  (5.8 KB, application/json)
     workflows/sub-workflow.json  (2.0 KB, application/json)
+    data-ingestion/embedding-ingestion.json  (3.2 KB, application/json)
 ```
 
 ## Error Handling
