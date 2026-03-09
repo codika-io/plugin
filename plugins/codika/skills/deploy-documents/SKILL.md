@@ -15,7 +15,7 @@ Upload use case documentation (stage 1-4 markdown files) to the Codika platform.
 
 ## Prerequisites
 
-- `codika-helper` CLI installed and authenticated (see `setup-codika` skill)
+- `codika` CLI installed and authenticated (see `setup-codika` skill)
 - A use case folder with a `documents/` subfolder containing stage markdown files
 - A project to deploy to (via `project.json` or `PROJECT_ID` in `config.ts`)
 
@@ -48,7 +48,7 @@ Not all stages are required — the CLI uploads whichever stages exist.
 ## Deploy Command
 
 ```bash
-codika-helper deploy documents <path> [options]
+codika deploy documents <path> [options]
 ```
 
 ### Options
@@ -72,19 +72,19 @@ codika-helper deploy documents <path> [options]
 **Standard deployment:**
 
 ```bash
-codika-helper deploy documents ./use-cases/marketplace/my-use-case
+codika deploy documents ./use-cases/marketplace/my-use-case
 ```
 
 **With explicit project ID:**
 
 ```bash
-codika-helper deploy documents ./use-cases/marketplace/my-use-case --project-id proj-abc123
+codika deploy documents ./use-cases/marketplace/my-use-case --project-id proj-abc123
 ```
 
 **JSON output:**
 
 ```bash
-codika-helper deploy documents ./use-cases/marketplace/my-use-case --json
+codika deploy documents ./use-cases/marketplace/my-use-case --json
 ```
 
 ## Expected Output
@@ -128,7 +128,7 @@ Documents are versioned on the platform:
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "API key is required" | Not authenticated | Run `codika-helper login` (see `setup-codika` skill) |
+| "API key is required" | Not authenticated | Run `codika login` (see `setup-codika` skill) |
 | "No documents/ folder found" | Missing folder | Create a `documents/` folder with stage files |
 | "No stage files found" | No matching files | Add files named `1_*.md`, `2_*.md`, etc. |
 | "file is empty" | Empty document | Add content to the empty file |

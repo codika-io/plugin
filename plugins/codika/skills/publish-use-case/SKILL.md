@@ -16,7 +16,7 @@ Promote a deployed use case from dev to production. Creates a production process
 
 ## Prerequisites
 
-- `codika-helper` CLI installed and authenticated (see `setup-codika` skill)
+- `codika` CLI installed and authenticated (see `setup-codika` skill)
 - A deployed use case with a `project.json` containing a `deployments` map (run `deploy-use-case` first)
 - An API key with `deploy:use-case` scope
 
@@ -28,19 +28,19 @@ Promote a deployed use case from dev to production. Creates a production process
 
 ```bash
 # 1. Deploy
-codika-helper deploy use-case .
+codika deploy use-case .
 
 # 2. Check project.json for the template ID
 # "deployments": { "1.0": { "templateId": "tmpl-abc123", ... } }
 
 # 3. Publish
-codika-helper publish tmpl-abc123 --path .
+codika publish tmpl-abc123 --path .
 ```
 
 ## Command
 
 ```bash
-codika-helper publish <templateId> [options]
+codika publish <templateId> [options]
 ```
 
 ### Arguments
@@ -93,13 +93,13 @@ Look up the version you want to publish and use the `templateId` value — `tmpl
 **Basic publish:**
 
 ```bash
-codika-helper publish tmpl-abc123 --path ./use-cases/marketplace/my-use-case
+codika publish tmpl-abc123 --path ./use-cases/marketplace/my-use-case
 ```
 
 **With visibility and sharing settings:**
 
 ```bash
-codika-helper publish tmpl-abc123 --path . \
+codika publish tmpl-abc123 --path . \
   --visibility organizational \
   --shared-with everyone
 ```
@@ -107,13 +107,13 @@ codika-helper publish tmpl-abc123 --path . \
 **With dev/prod auto-toggle:**
 
 ```bash
-codika-helper publish tmpl-abc123 --path . --auto-toggle-dev-prod
+codika publish tmpl-abc123 --path . --auto-toggle-dev-prod
 ```
 
 **JSON output for scripting:**
 
 ```bash
-codika-helper publish tmpl-abc123 --path . --json
+codika publish tmpl-abc123 --path . --json
 ```
 
 ## Expected Output
@@ -142,13 +142,13 @@ codika-helper publish tmpl-abc123 --path . --json
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "API key is required" | Not authenticated | Run `codika-helper login` (see `setup-codika` skill) |
+| "API key is required" | Not authenticated | Run `codika login` (see `setup-codika` skill) |
 | "Template not found" | Wrong template ID | Check the `deployments` map in `project.json` |
-| "No deployments found in project file" | `project.json` has no `deployments` map | Deploy first with `codika-helper deploy use-case .` |
+| "No deployments found in project file" | `project.json` has no `deployments` map | Deploy first with `codika deploy use-case .` |
 | "Invalid visibility value" | Bad `--visibility` value | Use `private`, `organizational`, or `public` |
 | "Invalid shared-with value" | Bad `--shared-with` value | Use `owner_only`, `admins`, or `everyone` |
-| 401 / Unauthorized | Invalid or expired API key | Run `codika-helper whoami`, then `codika-helper login` |
-| "Process already published" | Prod instance already exists | Use `codika-helper deploy use-case .` to update the existing prod instance |
+| 401 / Unauthorized | Invalid or expired API key | Run `codika whoami`, then `codika login` |
+| "Process already published" | Prod instance already exists | Use `codika deploy use-case .` to update the existing prod instance |
 
 ## Exit Codes
 
@@ -164,4 +164,4 @@ The CLI handles authentication automatically. The API key is resolved in this or
 2. `CODIKA_API_KEY` environment variable
 3. Active profile in config file
 
-Run `codika-helper whoami` to check the current identity, or `codika-helper use <profile>` to switch profiles.
+Run `codika whoami` to check the current identity, or `codika use <profile>` to switch profiles.

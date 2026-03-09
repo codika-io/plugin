@@ -30,22 +30,22 @@ This is a **marketplace** — it contains multiple independent plugins, each wit
 
 ### codika (`plugins/codika/`)
 
-Skills for the `codika-helper` CLI (`@codika-io/helper-sdk`). Pure documentation — no code, no dependencies, no secrets.
+Skills for the `codika` CLI (`@codika-io/helper-sdk`). Pure documentation — no code, no dependencies, no secrets.
 
 | Skill | Description |
 |-------|-------------|
-| `setup-codika` | Install the CLI globally and run `codika-helper login` |
-| `create-project` | Create a project via `codika-helper project create` |
-| `deploy-use-case` | Validate then deploy via `codika-helper verify` + `codika-helper deploy` |
-| `deploy-data-ingestion` | Deploy data ingestion config via `codika-helper deploy process-data-ingestion` |
-| `deploy-documents` | Upload stage documents via `codika-helper deploy documents` |
-| `publish-use-case` | Publish a deployment to production via `codika-helper publish` |
-| `verify-use-case` | Validate workflows via `codika-helper verify use-case` |
-| `init-use-case` | Scaffold a new use case via `codika-helper init` |
-| `fetch-use-case` | Download a deployed use case via `codika-helper get use-case` |
-| `trigger-workflow` | Trigger a workflow via `codika-helper trigger` |
-| `get-execution` | Fetch execution details via `codika-helper get execution` |
-| `list-executions` | List recent executions via `codika-helper list executions` |
+| `setup-codika` | Install the CLI globally and run `codika login` |
+| `create-project` | Create a project via `codika project create` |
+| `deploy-use-case` | Validate then deploy via `codika verify` + `codika deploy` |
+| `deploy-data-ingestion` | Deploy data ingestion config via `codika deploy process-data-ingestion` |
+| `deploy-documents` | Upload stage documents via `codika deploy documents` |
+| `publish-use-case` | Publish a deployment to production via `codika publish` |
+| `verify-use-case` | Validate workflows via `codika verify use-case` |
+| `init-use-case` | Scaffold a new use case via `codika init` |
+| `fetch-use-case` | Download a deployed use case via `codika get use-case` |
+| `trigger-workflow` | Trigger a workflow via `codika trigger` |
+| `get-execution` | Fetch execution details via `codika get execution` |
+| `list-executions` | List recent executions via `codika list executions` |
 
 ## Conventions
 

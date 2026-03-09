@@ -15,7 +15,7 @@ Retrieve full n8n workflow execution data (node-by-node) for debugging a trigger
 
 ## Prerequisites
 
-- `codika-helper` CLI installed and authenticated (see `setup-codika` skill)
+- `codika` CLI installed and authenticated (see `setup-codika` skill)
 - A workflow that has been deployed and triggered
 - An execution ID from the trigger response (see `trigger-workflow` skill)
 
@@ -28,7 +28,7 @@ Retrieve full n8n workflow execution data (node-by-node) for debugging a trigger
 ## Command
 
 ```bash
-codika-helper get execution <executionId> [options]
+codika get execution <executionId> [options]
 ```
 
 ### Arguments
@@ -64,25 +64,25 @@ The process instance ID is resolved in this order:
 **From a use case folder (reads `project.json` automatically):**
 
 ```bash
-cd my-use-case && codika-helper get execution abc-123-def
+cd my-use-case && codika get execution abc-123-def
 ```
 
 **With explicit process instance ID:**
 
 ```bash
-codika-helper get execution abc-123-def --process-instance-id pi-456
+codika get execution abc-123-def --process-instance-id pi-456
 ```
 
 **Deep + slim for debugging:**
 
 ```bash
-codika-helper get execution abc-123-def --deep --slim
+codika get execution abc-123-def --deep --slim
 ```
 
 **Save to file:**
 
 ```bash
-codika-helper get execution abc-123-def --deep --slim -o /tmp/execution.json
+codika get execution abc-123-def --deep --slim -o /tmp/execution.json
 ```
 
 ## Expected Output
@@ -116,18 +116,18 @@ When `--slim` is used, the CLI strips noisy fields (`pairedItem`, `workflowData`
 Combine both for the best debugging experience:
 
 ```bash
-codika-helper get execution abc-123-def --deep --slim
+codika get execution abc-123-def --deep --slim
 ```
 
 ## Error Handling
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "API key is required" | Not authenticated | Run `codika-helper login` (see `setup-codika` skill) |
+| "API key is required" | Not authenticated | Run `codika login` (see `setup-codika` skill) |
 | "No process instance ID found" | No `--process-instance-id` flag and no `project.json` | Provide `--process-instance-id` or run from a use case folder with `project.json` |
 | "Execution not found" | Invalid execution ID or execution expired | Verify the execution ID from the trigger response |
 | "n8n execution ID not available" | Old workflow without execution tracking | Re-deploy the use case with the latest CLI version |
-| 401 / Unauthorized | Invalid or expired API key | Run `codika-helper whoami` to check, then `codika-helper login` to re-authenticate |
+| 401 / Unauthorized | Invalid or expired API key | Run `codika whoami` to check, then `codika login` to re-authenticate |
 
 ## Authentication
 
@@ -137,4 +137,4 @@ The CLI handles authentication automatically. The API key is resolved in this or
 2. `CODIKA_API_KEY` environment variable
 3. Active profile in config file
 
-Run `codika-helper whoami` to check the current identity, or `codika-helper use <profile>` to switch profiles.
+Run `codika whoami` to check the current identity, or `codika use <profile>` to switch profiles.

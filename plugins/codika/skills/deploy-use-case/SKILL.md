@@ -15,7 +15,7 @@ Validate and deploy a use case to the Codika platform. Automatically tracks loca
 
 ## Prerequisites
 
-- `codika-helper` CLI installed and authenticated (see `setup-codika` skill)
+- `codika` CLI installed and authenticated (see `setup-codika` skill)
 - A use case folder with `config.ts` and `workflows/` directory
 - A project to deploy to (either via `project.json` or `PROJECT_ID` in `config.ts`)
 
@@ -27,16 +27,16 @@ The full flow from scratch:
 cd my-use-case
 
 # 1. Create a project and write project.json in the current folder
-codika-helper project create --name "My Project" --path .
+codika project create --name "My Project" --path .
 
 # 2. Write config.ts with getConfiguration() (no PROJECT_ID needed — it's in project.json)
 # 3. Create workflows in workflows/
 
 # 4. Validate
-codika-helper verify use-case .
+codika verify use-case .
 
 # 5. Deploy
-codika-helper deploy use-case .
+codika deploy use-case .
 ```
 
 The `--path .` flag tells the CLI to write `project.json` (containing the project ID) into the current directory. Without `--path`, the project ID is only printed — not saved.
@@ -88,16 +88,16 @@ Always validate before deploying:
 
 ```bash
 # Step 1: Validate
-codika-helper verify use-case <path>
+codika verify use-case <path>
 
 # Step 2: Deploy (only if validation passes)
-codika-helper deploy use-case <path>
+codika deploy use-case <path>
 ```
 
 ## Deploy Command
 
 ```bash
-codika-helper deploy use-case <path> [options]
+codika deploy use-case <path> [options]
 ```
 
 ### Version Flags
@@ -129,38 +129,38 @@ codika-helper deploy use-case <path> [options]
 **Standard deployment (patch bump):**
 
 ```bash
-codika-helper deploy use-case ./use-cases/marketplace/my-use-case
+codika deploy use-case ./use-cases/marketplace/my-use-case
 ```
 
 **Minor version bump:**
 
 ```bash
-codika-helper deploy use-case ./use-cases/marketplace/my-use-case --minor
+codika deploy use-case ./use-cases/marketplace/my-use-case --minor
 ```
 
 **Major version bump:**
 
 ```bash
-codika-helper deploy use-case ./use-cases/marketplace/my-use-case --major
+codika deploy use-case ./use-cases/marketplace/my-use-case --major
 ```
 
 **Deploy to explicit API version:**
 
 ```bash
-codika-helper deploy use-case ./use-cases/marketplace/my-use-case --version 2.0
+codika deploy use-case ./use-cases/marketplace/my-use-case --version 2.0
 ```
 
 **With additional metadata file:**
 
 ```bash
-codika-helper deploy use-case ./use-cases/marketplace/my-use-case \
+codika deploy use-case ./use-cases/marketplace/my-use-case \
   --additional-file "/path/to/prd.md:docs/prd.md"
 ```
 
 **JSON output for scripting:**
 
 ```bash
-codika-helper deploy use-case ./use-cases/marketplace/my-use-case --json
+codika deploy use-case ./use-cases/marketplace/my-use-case --json
 ```
 
 ## Expected Output
@@ -192,7 +192,7 @@ codika-helper deploy use-case ./use-cases/marketplace/my-use-case --json
    - `project-info.json` is updated with the API→local version mapping
    - `project.json` is updated with `devProcessInstanceId` and `deployments` map (version → {templateId, createdAt})
 
-The `deployments` map in `project.json` is used by `codika-helper publish` to promote a deployment to production. See the `publish-use-case` skill.
+The `deployments` map in `project.json` is used by `codika publish` to promote a deployment to production. See the `publish-use-case` skill.
 
 ## Version Tracking
 
@@ -227,12 +227,12 @@ Stores version mapping history per project:
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "API key is required" | Not authenticated | Run `codika-helper login` or `codika-helper use <profile>` (see `setup-codika` skill) |
+| "API key is required" | Not authenticated | Run `codika login` or `codika use <profile>` (see `setup-codika` skill) |
 | "Use case path does not exist" | Wrong path | Check the path points to a folder with `config.ts` |
-| Validation errors in response | Workflow issues | Run `codika-helper verify use-case <path> --fix` first (see `verify-use-case` skill) |
-| "No project ID found" | No project.json or PROJECT_ID | Run `codika-helper project create --name "..." --path <path>` or add `project.json` |
+| Validation errors in response | Workflow issues | Run `codika verify use-case <path> --fix` first (see `verify-use-case` skill) |
+| "No project ID found" | No project.json or PROJECT_ID | Run `codika project create --name "..." --path <path>` or add `project.json` |
 | "config.ts must export getConfiguration" | Missing export | Ensure `config.ts` exports a `getConfiguration()` function |
-| 401 / Unauthorized | Invalid API key | Re-run `codika-helper login` or check `codika-helper whoami` |
+| 401 / Unauthorized | Invalid API key | Re-run `codika login` or check `codika whoami` |
 | "Invalid version format" | Bad `--version` value | Use `X.Y` format (e.g., `--version 1.0`) |
 
 ## Exit Codes

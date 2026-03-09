@@ -16,7 +16,7 @@ Validate a use case folder (or single workflow) without deploying.
 
 ## Prerequisites
 
-- `codika-helper` CLI installed (see `setup-codika` skill)
+- `codika` CLI installed (see `setup-codika` skill)
 - No authentication needed — verification runs locally
 
 ## Commands
@@ -24,13 +24,13 @@ Validate a use case folder (or single workflow) without deploying.
 ### Validate an entire use case
 
 ```bash
-codika-helper verify use-case <path> [options]
+codika verify use-case <path> [options]
 ```
 
 ### Validate a single workflow
 
 ```bash
-codika-helper verify workflow <path> [options]
+codika verify workflow <path> [options]
 ```
 
 ### Options
@@ -49,31 +49,31 @@ codika-helper verify workflow <path> [options]
 **Basic validation:**
 
 ```bash
-codika-helper verify use-case ./use-cases/marketplace/my-use-case
+codika verify use-case ./use-cases/marketplace/my-use-case
 ```
 
 **Auto-fix fixable issues:**
 
 ```bash
-codika-helper verify use-case ./use-cases/marketplace/my-use-case --fix
+codika verify use-case ./use-cases/marketplace/my-use-case --fix
 ```
 
 **Preview fixes without applying:**
 
 ```bash
-codika-helper verify use-case ./use-cases/marketplace/my-use-case --dry-run
+codika verify use-case ./use-cases/marketplace/my-use-case --dry-run
 ```
 
 **JSON output for CI:**
 
 ```bash
-codika-helper verify use-case ./use-cases/marketplace/my-use-case --json
+codika verify use-case ./use-cases/marketplace/my-use-case --json
 ```
 
 **Single workflow validation:**
 
 ```bash
-codika-helper verify workflow ./workflows/main-workflow.json
+codika verify workflow ./workflows/main-workflow.json
 ```
 
 ## Expected Output
@@ -131,11 +131,11 @@ codika-helper verify workflow ./workflows/main-workflow.json
 
 ## Recommended Workflow
 
-1. Run `codika-helper verify use-case <path>` to see all issues
-2. Run `codika-helper verify use-case <path> --fix` to auto-fix what's possible
+1. Run `codika verify use-case <path>` to see all issues
+2. Run `codika verify use-case <path> --fix` to auto-fix what's possible
 3. Manually fix remaining `must` violations
 4. Run verification again to confirm clean
-5. Deploy with `codika-helper deploy use-case <path>` (see `deploy-use-case` skill)
+5. Deploy with `codika deploy use-case <path>` (see `deploy-use-case` skill)
 
 ## Exit Codes
 

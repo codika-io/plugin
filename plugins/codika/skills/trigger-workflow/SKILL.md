@@ -10,7 +10,7 @@ Trigger a deployed Codika workflow and optionally poll for results.
 ## Prerequisites
 
 - Use case is deployed (`project.json` contains `devProcessInstanceId`)
-- Authenticated via `codika-helper login` (check with `codika-helper whoami`) or `CODIKA_API_KEY` env var
+- Authenticated via `codika login` (check with `codika whoami`) or `CODIKA_API_KEY` env var
 
 ## Resolving the Workflow ID
 
@@ -21,7 +21,7 @@ The `workflowId` is the `workflowTemplateId` from `config.ts`. If the user provi
 ### Basic trigger (fire-and-forget)
 
 ```bash
-codika-helper trigger <workflowId>
+codika trigger <workflowId>
 ```
 
 Returns immediately with an `executionId`. The `processInstanceId` is auto-resolved from `project.json` in the current directory.
@@ -31,7 +31,7 @@ Returns immediately with an `executionId`. The `processInstanceId` is auto-resol
 Use a heredoc with `--payload-file -` to pass JSON via stdin. This avoids shell escaping issues with inline JSON.
 
 ```bash
-codika-helper trigger <workflowId> --payload-file - <<'EOF'
+codika trigger <workflowId> --payload-file - <<'EOF'
 {"field": "value", "nested": {"key": "no escaping needed"}}
 EOF
 ```
@@ -39,22 +39,22 @@ EOF
 For pre-existing JSON files, pass the path directly:
 
 ```bash
-codika-helper trigger <workflowId> --payload-file input.json
+codika trigger <workflowId> --payload-file input.json
 ```
 
 ### Poll for results
 
 ```bash
 # Wait for completion (default timeout: 120s)
-codika-helper trigger <workflowId> --poll --payload-file - <<'EOF'
+codika trigger <workflowId> --poll --payload-file - <<'EOF'
 {"field": "value"}
 EOF
 
 # Custom timeout
-codika-helper trigger <workflowId> --poll --timeout 60
+codika trigger <workflowId> --poll --timeout 60
 
 # Save result to file
-codika-helper trigger <workflowId> --poll -o result.json
+codika trigger <workflowId> --poll -o result.json
 ```
 
 ### All options
@@ -85,20 +85,20 @@ The command resolves `processInstanceId` automatically:
 ```bash
 # From inside a use case folder (project.json auto-detected)
 cd my-use-case/
-codika-helper trigger proposal-generation --poll --payload-file - <<'EOF'
+codika trigger proposal-generation --poll --payload-file - <<'EOF'
 {"transcript": "Meeting notes from client call..."}
 EOF
 
 # Explicit path
-codika-helper trigger proposal-generation --path ./my-use-case --poll
+codika trigger proposal-generation --path ./my-use-case --poll
 
 # CI/CD with JSON output
-codika-helper trigger proposal-generation \
+codika trigger proposal-generation \
   --payload-file test-input.json \
   --poll --timeout 60 --json
 
 # Explicit process instance ID
-codika-helper trigger proposal-generation \
+codika trigger proposal-generation \
   --process-instance-id abc-123 \
   --poll --payload-file - <<'EOF'
 {"text": "test"}
@@ -117,14 +117,14 @@ EOF
 - `workflowId` is the `workflowTemplateId` from config.ts
 - Request body wraps data in `{"payload": {...}}`
 - Execution is async — trigger returns immediately
-- Use `codika-helper get execution <executionId>` for full n8n execution details
+- Use `codika get execution <executionId>` for full n8n execution details
 
 ## Error Reference
 
 | HTTP | Error              | Cause                             | Fix                                                                                |
 | ---- | ------------------ | --------------------------------- | ---------------------------------------------------------------------------------- |
-| 401  | Invalid API key    | Wrong or expired key              | Run `codika-helper whoami` to check, then `codika-helper login` to re-authenticate |
+| 401  | Invalid API key    | Wrong or expired key              | Run `codika whoami` to check, then `codika login` to re-authenticate |
 | 403  | Missing scope      | Key lacks `workflows:trigger`     | Create new key with scope                                                          |
-| 403  | No access          | Process instance in different org | Switch profile with `codika-helper use <profile>`                                  |
+| 403  | No access          | Process instance in different org | Switch profile with `codika use <profile>`                                  |
 | 404  | Workflow not found | Wrong workflowId                  | Check `config.ts`                                                                  |
 | 412  | Instance inactive  | Process paused or failed          | Re-deploy or check platform                                                        |

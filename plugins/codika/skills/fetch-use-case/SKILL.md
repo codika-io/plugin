@@ -16,7 +16,7 @@ Fetch a deployed use case from the Codika platform with all its metadata documen
 
 ## Prerequisites
 
-- `codika-helper` CLI installed and authenticated (see `setup-codika` skill)
+- `codika` CLI installed and authenticated (see `setup-codika` skill)
 - A project ID for the deployed use case
 
 ## Resolving the Project ID
@@ -34,7 +34,7 @@ cat <use-case-path>/custom-project.json
 ## Command
 
 ```bash
-codika-helper get use-case <projectId> [outputPath] [options]
+codika get use-case <projectId> [outputPath] [options]
 ```
 
 ### Arguments
@@ -64,43 +64,43 @@ codika-helper get use-case <projectId> [outputPath] [options]
 **Fetch the latest version:**
 
 ```bash
-codika-helper get use-case my-project-id ./restored
+codika get use-case my-project-id ./restored
 ```
 
 **Fetch a specific version:**
 
 ```bash
-codika-helper get use-case my-project-id ./restored --version 1.0
+codika get use-case my-project-id ./restored --version 1.0
 ```
 
 **List documents only (no download):**
 
 ```bash
-codika-helper get use-case my-project-id --list
+codika get use-case my-project-id --list
 ```
 
 **Fetch with a specific data ingestion version:**
 
 ```bash
-codika-helper get use-case my-project-id ./restored --di-version 1.2
+codika get use-case my-project-id ./restored --di-version 1.2
 ```
 
 **Fetch without data ingestion:**
 
 ```bash
-codika-helper get use-case my-project-id ./restored --no-data-ingestion
+codika get use-case my-project-id ./restored --no-data-ingestion
 ```
 
 **List with JSON output:**
 
 ```bash
-codika-helper get use-case my-project-id --list --json
+codika get use-case my-project-id --list --json
 ```
 
 **Check CLI version (not use case version):**
 
 ```bash
-codika-helper -V
+codika -V
 ```
 
 ## Expected Output
@@ -146,10 +146,10 @@ Fetching use case my-project-id...
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "API key is required" | Not authenticated | Run `codika-helper login` (see `setup-codika` skill) |
+| "API key is required" | Not authenticated | Run `codika login` (see `setup-codika` skill) |
 | "Project not found" | Invalid or non-existent project ID | Verify the project ID from the Codika dashboard or `project.json` |
 | "Invalid version format" | Malformed `--version` value | Use `X.Y` format (e.g., `1.0`, `2.1`) |
-| 401 / Unauthorized | Invalid or expired API key | Re-run `codika-helper login` |
+| 401 / Unauthorized | Invalid or expired API key | Re-run `codika login` |
 
 ## Authentication
 
@@ -159,4 +159,4 @@ The CLI handles authentication automatically. The API key is resolved in this or
 2. `CODIKA_API_KEY` environment variable
 3. Active profile in config file
 
-Run `codika-helper whoami` to check the current identity, or `codika-helper use <profile>` to switch profiles.
+Run `codika whoami` to check the current identity, or `codika use <profile>` to switch profiles.

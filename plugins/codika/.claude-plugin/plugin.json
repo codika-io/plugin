@@ -1,6 +1,6 @@
 {
   "name": "codika",
-  "description": "Skills for the codika-helper CLI — set up auth, create projects, validate and deploy use cases",
+  "description": "Skills for the codika CLI — set up auth, create projects, validate and deploy use cases",
   "version": "1.0.0",
   "author": {
     "name": "Codika",

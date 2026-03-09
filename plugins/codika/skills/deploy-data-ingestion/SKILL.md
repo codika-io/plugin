@@ -15,7 +15,7 @@ Deploy a process-level data ingestion configuration to the Codika platform. Data
 
 ## Prerequisites
 
-- `codika-helper` CLI installed and authenticated (see `setup-codika` skill)
+- `codika` CLI installed and authenticated (see `setup-codika` skill)
 - A use case folder with `config.ts` exporting `getDataIngestionConfig()` and a `data-ingestion/` folder with exactly one workflow JSON file
 - A project to deploy to (via `project.json`)
 
@@ -41,7 +41,7 @@ my-use-case/
 ## Deploy Command
 
 ```bash
-codika-helper deploy process-data-ingestion <path> [options]
+codika deploy process-data-ingestion <path> [options]
 ```
 
 ### Version Strategy
@@ -70,25 +70,25 @@ codika-helper deploy process-data-ingestion <path> [options]
 **Standard deployment (minor bump):**
 
 ```bash
-codika-helper deploy process-data-ingestion ./use-cases/marketplace/my-use-case
+codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case
 ```
 
 **Major version bump:**
 
 ```bash
-codika-helper deploy process-data-ingestion ./use-cases/marketplace/my-use-case --version-strategy major_bump
+codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case --version-strategy major_bump
 ```
 
 **Explicit version:**
 
 ```bash
-codika-helper deploy process-data-ingestion ./use-cases/marketplace/my-use-case --version-strategy explicit --explicit-version 3.0
+codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case --version-strategy explicit --explicit-version 3.0
 ```
 
 **JSON output:**
 
 ```bash
-codika-helper deploy process-data-ingestion ./use-cases/marketplace/my-use-case --json
+codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case --json
 ```
 
 ## Expected Output
@@ -165,11 +165,11 @@ Data ingestion has its **own version line**, separate from use case deployments:
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "API key is required" | Not authenticated | Run `codika-helper login` (see `setup-codika` skill) |
+| "API key is required" | Not authenticated | Run `codika login` (see `setup-codika` skill) |
 | "config.ts must export getDataIngestionConfig" | Missing export | Add `getDataIngestionConfig()` to config.ts |
 | "No data-ingestion/ folder found" | Missing folder | Create `data-ingestion/` with one workflow JSON file |
 | "Multiple JSON files found" | Too many files | Keep exactly one `.json` file in `data-ingestion/` |
-| "No project ID found" | No project.json | Run `codika-helper project create --name "..." --path <path>` |
+| "No project ID found" | No project.json | Run `codika project create --name "..." --path <path>` |
 
 ## Exit Codes
 

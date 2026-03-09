@@ -15,14 +15,14 @@ Scaffold a new Codika use case folder with a ready-to-verify, ready-to-deploy te
 
 ## Prerequisites
 
-- `codika-helper` CLI installed (`npm install -g @codika-io/helper-sdk`)
-- For project creation: authenticated via `codika-helper login` (see `setup-codika` skill)
+- `codika` CLI installed (`npm install -g @codika-io/helper-sdk`)
+- For project creation: authenticated via `codika login` (see `setup-codika` skill)
 - Project creation is optional — scaffolding works without authentication
 
 ## Command
 
 ```bash
-codika-helper init <path> [options]
+codika init <path> [options]
 ```
 
 ### Arguments
@@ -51,25 +51,25 @@ codika-helper init <path> [options]
 **Scaffold with project creation (default):**
 
 ```bash
-codika-helper init ./my-use-case --name "My Automation"
+codika init ./my-use-case --name "My Automation"
 ```
 
 **Scaffold without project creation:**
 
 ```bash
-codika-helper init ./my-use-case --name "My Automation" --no-project
+codika init ./my-use-case --name "My Automation" --no-project
 ```
 
 **Scaffold with existing project ID:**
 
 ```bash
-codika-helper init ./my-use-case --name "My Automation" --project-id abc123
+codika init ./my-use-case --name "My Automation" --project-id abc123
 ```
 
 **JSON output for scripting:**
 
 ```bash
-codika-helper init ./my-use-case --name "My Automation" --no-project --json
+codika init ./my-use-case --name "My Automation" --no-project --json
 ```
 
 ## Generated Files
@@ -97,8 +97,8 @@ When the user manages multiple use cases, they can share a single `package.json`
 mkdir my-automations && cd my-automations
 npm init -y && npm install @codika-io/helper-sdk
 echo 'node_modules/' > .gitignore
-codika-helper init ./email-automation --name "Email Automation"
-codika-helper init ./report-generator --name "Report Generator"
+codika init ./email-automation --name "Email Automation"
+codika init ./report-generator --name "Report Generator"
 ```
 
 ```
@@ -148,24 +148,24 @@ Creating use case "My Automation"...
 
   1. Edit the workflow JSON files in ./my-use-case/workflows/
   2. Update config.ts with your schemas and metadata
-  3. Run: codika-helper verify use-case ./my-use-case
-  4. Run: codika-helper deploy use-case ./my-use-case
+  3. Run: codika verify use-case ./my-use-case
+  4. Run: codika deploy use-case ./my-use-case
 ```
 
 ## Next Steps After Init
 
 ```bash
 # 1. Validate the use case
-codika-helper verify use-case ./my-use-case
+codika verify use-case ./my-use-case
 
 # 2. Deploy to the platform
-codika-helper deploy use-case ./my-use-case
+codika deploy use-case ./my-use-case
 ```
 
 If you used `--no-project`, create a project before deploying:
 
 ```bash
-codika-helper project create --name "My Automation" --path ./my-use-case
+codika project create --name "My Automation" --path ./my-use-case
 ```
 
 ## Error Handling
@@ -174,8 +174,8 @@ codika-helper project create --name "My Automation" --path ./my-use-case
 | --------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
 | "Directory already contains a config.ts"      | Path already has a use case               | Use a different path or delete the existing folder         |
 | "Use case name is required"                   | No `--name` flag and non-interactive mode | Provide `--name` flag                                      |
-| "No API key found, skipping project creation" | Not authenticated (warning, not error)    | Run `codika-helper login` first, or use `--no-project`     |
-| Project creation failed                       | Invalid API key or network issue          | Check `codika-helper whoami`, re-run `codika-helper login` |
+| "No API key found, skipping project creation" | Not authenticated (warning, not error)    | Run `codika login` first, or use `--no-project`     |
+| Project creation failed                       | Invalid API key or network issue          | Check `codika whoami`, re-run `codika login` |
 
 ## Exit Codes
 

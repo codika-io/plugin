@@ -16,7 +16,7 @@ Retrieve a paginated list of recent executions for a deployed process instance. 
 
 ## Prerequisites
 
-- `codika-helper` CLI installed and authenticated (see `setup-codika` skill)
+- `codika` CLI installed and authenticated (see `setup-codika` skill)
 - A deployed process instance (`devProcessInstanceId` or `prodProcessInstanceId` in `project.json`)
 - An API key with `executions:read` scope
 
@@ -30,7 +30,7 @@ Retrieve a paginated list of recent executions for a deployed process instance. 
 ## Command
 
 ```bash
-codika-helper list executions <processInstanceId> [options]
+codika list executions <processInstanceId> [options]
 ```
 
 ### Arguments
@@ -68,25 +68,25 @@ Use `devProcessInstanceId` to list dev executions and `prodProcessInstanceId` to
 **List recent executions for a dev instance:**
 
 ```bash
-codika-helper list executions pi-dev-789
+codika list executions pi-dev-789
 ```
 
 **Filter by workflow:**
 
 ```bash
-codika-helper list executions pi-dev-789 --workflow-id wf-abc123
+codika list executions pi-dev-789 --workflow-id wf-abc123
 ```
 
 **Failed executions only:**
 
 ```bash
-codika-helper list executions pi-dev-789 --failed-only
+codika list executions pi-dev-789 --failed-only
 ```
 
 **JSON output for scripting:**
 
 ```bash
-codika-helper list executions pi-dev-789 --limit 50 --json
+codika list executions pi-dev-789 --limit 50 --json
 ```
 
 ## Expected Output
@@ -113,9 +113,9 @@ codika-helper list executions pi-dev-789 --limit 50 --json
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "API key is required" | Not authenticated | Run `codika-helper login` (see `setup-codika` skill) |
+| "API key is required" | Not authenticated | Run `codika login` (see `setup-codika` skill) |
 | "Process instance not found" | Invalid process instance ID | Check `devProcessInstanceId` or `prodProcessInstanceId` in `project.json` |
-| 401 / Unauthorized | Invalid or expired API key | Run `codika-helper whoami`, then `codika-helper login` |
+| 401 / Unauthorized | Invalid or expired API key | Run `codika whoami`, then `codika login` |
 
 Note: Zero executions is not an error — the CLI prints "No executions found." and exits with code 0.
 
@@ -133,4 +133,4 @@ The CLI handles authentication automatically. The API key is resolved in this or
 2. `CODIKA_API_KEY` environment variable
 3. Active profile in config file
 
-Run `codika-helper whoami` to check the current identity, or `codika-helper use <profile>` to switch profiles.
+Run `codika whoami` to check the current identity, or `codika use <profile>` to switch profiles.

@@ -1,11 +1,11 @@
 ---
 name: setup-codika
-description: Installs the codika-helper CLI and authenticates with the Codika platform. Use when the user asks to set up Codika, install the CLI, login, authenticate, check identity, or switch profiles. Automatically activates when a command fails with 'API key is required' or authentication errors.
+description: Installs the codika CLI and authenticates with the Codika platform. Use when the user asks to set up Codika, install the CLI, login, authenticate, check identity, or switch profiles. Automatically activates when a command fails with 'API key is required' or authentication errors.
 ---
 
 # Setup Codika
 
-Install the `codika-helper` CLI and authenticate with the Codika platform.
+Install the `codika` CLI and authenticate with the Codika platform.
 
 ## When to Use
 
@@ -19,7 +19,7 @@ Install the `codika-helper` CLI and authenticate with the Codika platform.
 ### 1. Check if already installed
 
 ```bash
-codika-helper --version
+codika --version
 ```
 
 If the command is not found, install it:
@@ -31,7 +31,7 @@ npm install -g @codika-io/helper-sdk
 ### 2. Check current authentication
 
 ```bash
-codika-helper whoami
+codika whoami
 ```
 
 If logged in, this shows the current organization, key name, scopes, and profile. If not logged in, proceed to step 3.
@@ -41,25 +41,25 @@ If logged in, this shows the current organization, key name, scopes, and profile
 **Interactive mode** (prompts for API key with masked input):
 
 ```bash
-codika-helper login
+codika login
 ```
 
 **Non-interactive mode** (for CI/CD or scripting):
 
 ```bash
-codika-helper login --api-key <key>
+codika login --api-key <key>
 ```
 
 **With a custom profile name:**
 
 ```bash
-codika-helper login --name my-org
+codika login --name my-org
 ```
 
 **With a custom base URL** (for dev/staging):
 
 ```bash
-codika-helper login --api-key <key> --base-url <url>
+codika login --api-key <key> --base-url <url>
 ```
 
 On login, the CLI verifies the key against the platform and stores a profile with full metadata (organization name, key name, scopes, expiration).
@@ -67,7 +67,7 @@ On login, the CLI verifies the key against the platform and stores a profile wit
 ### 4. Verify
 
 ```bash
-codika-helper whoami
+codika whoami
 ```
 
 Shows the authenticated identity: organization name, organization ID, key name, scopes, and expiry.
@@ -79,7 +79,7 @@ The CLI supports multiple API keys (profiles). Each profile stores a key and its
 ### Add another key
 
 ```bash
-codika-helper login --api-key <second-key>
+codika login --api-key <second-key>
 ```
 
 A new profile is created automatically, named after the organization. If a profile for the same organization already exists, it is replaced.
@@ -87,7 +87,7 @@ A new profile is created automatically, named after the organization. If a profi
 ### List all profiles
 
 ```bash
-codika-helper use
+codika use
 ```
 
 Shows all stored profiles with an active marker:
@@ -101,20 +101,20 @@ Profiles:
 ### Switch active profile
 
 ```bash
-codika-helper use <profile-name>
+codika use <profile-name>
 ```
 
 ### Remove a profile
 
 ```bash
-codika-helper logout              # removes the active profile
-codika-helper logout <name>       # removes a specific profile
+codika logout              # removes the active profile
+codika logout <name>       # removes a specific profile
 ```
 
 ### Show all configuration
 
 ```bash
-codika-helper config show
+codika config show
 ```
 
 Lists all profiles and the active one.
@@ -122,8 +122,8 @@ Lists all profiles and the active one.
 ### Clear all configuration
 
 ```bash
-codika-helper config clear                   # remove everything
-codika-helper config clear --profile <name>  # remove one profile
+codika config clear                   # remove everything
+codika config clear --profile <name>  # remove one profile
 ```
 
 ## Where to Get an API Key
@@ -132,7 +132,7 @@ API keys are created from the Codika dashboard under Organization Settings > API
 
 ## Configuration Storage
 
-- Config file: `~/.config/codika-helper/config.json`
+- Config file: `~/.config/codika/config.json`
 - File permissions: `0o600` (owner read/write only)
 - Directory permissions: `0o700` (owner only)
 - Format: multi-profile JSON with active profile pointer
@@ -154,5 +154,5 @@ For deploy commands, if the use case's project file (default `project.json`, or 
 |---------|--------|
 | `npm: command not found` | Node.js is not installed. Ask the user to install Node.js 18+. |
 | `EACCES` on global install | Try `npm install -g @codika-io/helper-sdk --prefix ~/.npm-global` or suggest using `npx`. |
-| Login succeeds but deploy fails | Run `codika-helper whoami` — the key may not have the right scopes. |
-| Wrong organization | Run `codika-helper use` to list profiles and switch with `codika-helper use <name>`. |
+| Login succeeds but deploy fails | Run `codika whoami` — the key may not have the right scopes. |
+| Wrong organization | Run `codika use` to list profiles and switch with `codika use <name>`. |

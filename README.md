@@ -20,7 +20,7 @@ Public Claude Code plugin marketplace by [Codika](https://codika.io). Install pl
 
 ```bash
 npm install -g @codika-io/helper-sdk
-codika-helper login
+codika login
 ```
 
 ## Available Plugins
@@ -31,7 +31,7 @@ codika-helper login
 
 ## Plugin: codika
 
-Skills for the `codika-helper` CLI. Once installed, Claude Code agents can:
+Skills for the `codika` CLI. Once installed, Claude Code agents can:
 
 | Skill | What it does |
 |-------|-------------|
