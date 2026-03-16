@@ -42,6 +42,7 @@ codika get skills [processInstanceId] [options]
 | `--stdout` | `false` | Print skill content to stdout instead of writing files |
 | `--api-url <url>` | Production | Override API URL |
 | `--api-key <key>` | Active profile | Override API key |
+| `--profile <name>` | Active profile | Use a specific profile instead of the active one |
 | `--json` | `false` | Structured JSON output |
 
 ## Examples
@@ -67,6 +68,14 @@ codika get skills --output .claude/skills
 ```
 
 Downloads skills directly into `.claude/skills/` for Claude Code auto-discovery.
+
+### With a specific profile (multi-org)
+
+```bash
+codika get skills --profile wat
+```
+
+Uses the `wat` profile's API key instead of the active one. To find the right profile, read `organizationId` from `project.json` and match it against `codika use --json` output.
 
 ### JSON output for scripting
 

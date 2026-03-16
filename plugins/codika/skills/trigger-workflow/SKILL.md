@@ -70,6 +70,7 @@ codika trigger <workflowId> --poll -o result.json
 | `-o, --output <path>`        | Save result to file (with --poll)                        |
 | `--api-url <url>`            | Override API URL                                         |
 | `--api-key <key>`            | Override API key                                         |
+| `--profile <name>`           | Use a specific profile instead of the active one         |
 | `--json`                     | Structured JSON output                                   |
 
 ### Process instance ID resolution

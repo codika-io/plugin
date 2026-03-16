@@ -121,6 +121,7 @@ codika deploy use-case <path> [options]
 | `--project-file <path>` | Custom project file path (default: `project.json`) |
 | `--api-url <url>` | Override API URL |
 | `--api-key <key>` | Override API key |
+| `--profile <name>` | Use a specific profile instead of the active one |
 | `--additional-file <abs:rel>` | Add extra file (repeatable). Format: `absolutePath:relativePath` |
 | `--json` | Output result as JSON |
 
