@@ -55,13 +55,23 @@ codika get skills
 
 Resolves `devProcessInstanceId` from `project.json` and downloads skills to `./skills/`.
 
-### With explicit process instance ID
+### Typical agent usage (from anywhere, all explicit)
 
 ```bash
-codika get skills abc123def456
+codika get skills 019c8fb3-6bb2-773d-bf90-540c35bf8457 --profile satelites --output .claude/skills
 ```
 
-### Download to a specific directory
+This is the most common pattern for agents: explicit process instance ID + explicit profile + explicit output directory. Works from any folder — no project.json needed.
+
+### From inside a use case folder (shorthand)
+
+```bash
+codika get skills
+```
+
+Only works when `project.json` exists in the current directory with `devProcessInstanceId`. Uses the active profile.
+
+### Download to Claude Code skills directory
 
 ```bash
 codika get skills --output .claude/skills
@@ -75,7 +85,7 @@ Downloads skills directly into `.claude/skills/` for Claude Code auto-discovery.
 codika get skills --profile wat
 ```
 
-Uses the `wat` profile's API key instead of the active one. To find the right profile, read `organizationId` from `project.json` and match it against `codika use --json` output.
+Uses the `wat` profile's API key instead of the active one. To find the right profile for an org, run `codika use --json` to list all profiles with their `organizationId`, then match against the project's `organizationId`.
 
 ### JSON output for scripting
 
