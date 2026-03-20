@@ -19,7 +19,7 @@ Public Claude Code plugin marketplace by [Codika](https://codika.io). Install pl
 ### 3. Install the CLI
 
 ```bash
-npm install -g @codika-io/helper-sdk
+npm install -g codika
 codika login
 ```
 

@@ -25,7 +25,7 @@ codika --version
 If the command is not found, install it:
 
 ```bash
-npm install -g @codika-io/helper-sdk
+npm install -g codika
 ```
 
 ### 2. Check current authentication
@@ -153,6 +153,6 @@ For deploy commands, if the use case's project file (default `project.json`, or 
 | Symptom | Action |
 |---------|--------|
 | `npm: command not found` | Node.js is not installed. Ask the user to install Node.js 18+. |
-| `EACCES` on global install | Try `npm install -g @codika-io/helper-sdk --prefix ~/.npm-global` or suggest using `npx`. |
+| `EACCES` on global install | Try `npm install -g codika --prefix ~/.npm-global` or suggest using `npx`. |
 | Login succeeds but deploy fails | Run `codika whoami` — the key may not have the right scopes. |
 | Wrong organization | Run `codika use` to list profiles and switch with `codika use <name>`. |

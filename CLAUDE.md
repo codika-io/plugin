@@ -33,7 +33,7 @@ This is a **marketplace** — it contains multiple independent plugins, each wit
 
 ### codika (`plugins/codika/`)
 
-Skills for the `codika` CLI (`@codika-io/helper-sdk`). Pure documentation — no code, no dependencies, no secrets.
+Skills for the `codika` CLI (`codika`). Pure documentation — no code, no dependencies, no secrets.
 
 | Skill | Description |
 |-------|-------------|

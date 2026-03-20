@@ -15,7 +15,7 @@ Scaffold a new Codika use case folder with a ready-to-verify, ready-to-deploy te
 
 ## Prerequisites
 
-- `codika` CLI installed (`npm install -g @codika-io/helper-sdk`)
+- `codika` CLI installed (`npm install -g codika`)
 - For project creation: authenticated via `codika login` (see `setup-codika` skill)
 - Project creation is optional — scaffolding works without authentication
 
@@ -79,7 +79,7 @@ my-use-case/
   config.ts                         # Deployment configuration (3 workflows)
   version.json                      # Version tracking (starts at 1.0.0)
   project.json                      # Project ID (only if project created or --project-id). Filename changes if --project-file is used.
-  package.json                      # Dependencies (@codika-io/helper-sdk)
+  package.json                      # Dependencies (codika)
   tsconfig.json                     # TypeScript config for IDE support
   .gitignore                        # Ignores node_modules/
   node_modules/                     # Installed after scaffolding (unless --no-install)
@@ -95,7 +95,7 @@ When the user manages multiple use cases, they can share a single `package.json`
 
 ```bash
 mkdir my-automations && cd my-automations
-npm init -y && npm install @codika-io/helper-sdk
+npm init -y && npm install codika
 echo 'node_modules/' > .gitignore
 codika init ./email-automation --name "Email Automation"
 codika init ./report-generator --name "Report Generator"
@@ -113,7 +113,7 @@ my-automations/
     workflows/
 ```
 
-The CLI detects the existing `@codika-io/helper-sdk` dependency in a parent `package.json` and skips creating per-use-case dependency files. Each use case is still independently deployable.
+The CLI detects the existing `codika` dependency in a parent `package.json` and skips creating per-use-case dependency files. Each use case is still independently deployable.
 
 ### What the Template Demonstrates
 
