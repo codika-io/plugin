@@ -27,7 +27,7 @@ codika login
 
 | Plugin | Description | Skills |
 |--------|-------------|--------|
-| `codika` | CLI skills for creating projects, deploying and validating use cases | `setup-codika`, `create-project`, `deploy-use-case`, `redeploy-use-case`, `verify-use-case` |
+| `codika` | CLI skills for creating projects, deploying and validating use cases, managing integrations | `setup-codika`, `create-project`, `deploy-use-case`, `redeploy-use-case`, `verify-use-case`, `manage-integrations` |
 
 ## Plugin: codika
 
@@ -40,6 +40,7 @@ Skills for the `codika` CLI. Once installed, Claude Code agents can:
 | `codika:deploy-use-case` | Validate and deploy a use case |
 | `codika:redeploy-use-case` | Redeploy an instance with different parameters |
 | `codika:verify-use-case` | Validate workflows without deploying |
+| `codika:manage-integrations` | Configure, list, and delete integrations (API keys, credentials) |
 
 ## What is Codika?
 

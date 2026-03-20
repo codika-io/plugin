@@ -22,7 +22,8 @@ This is a **marketplace** — it contains multiple independent plugins, each wit
 │           ├── deploy-documents/
 │           ├── publish-use-case/
 │           ├── redeploy-use-case/
-│           └── verify-use-case/
+│           ├── verify-use-case/
+│           └── manage-integrations/
 ├── README.md
 ├── CLAUDE.md
 └── LICENSE
@@ -49,6 +50,7 @@ Skills for the `codika` CLI (`@codika-io/helper-sdk`). Pure documentation — no
 | `trigger-workflow` | Trigger a workflow via `codika trigger` |
 | `get-execution` | Fetch execution details via `codika get execution` |
 | `list-executions` | List recent executions via `codika list executions` |
+| `manage-integrations` | Manage integrations (set, list, delete) via `codika integration` |
 
 ## Conventions
 
