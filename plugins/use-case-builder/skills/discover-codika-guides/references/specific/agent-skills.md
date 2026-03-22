@@ -308,13 +308,13 @@ Runs automatically on a schedule ({human-readable schedule}). No user input requ
 
 {Cron expression} — {Human-readable description} ({timezone})
 
-## Manual trigger (for testing)
+## Manual trigger
 
 ```bash
-codika trigger {workflow-template-id}
+codika trigger {workflow-template-id} --poll
 ```
 
-No payload required.
+No payload required. The CLI creates an execution upfront and passes it to the workflow — `--poll` works exactly like HTTP triggers.
 
 ## Output
 
@@ -345,13 +345,13 @@ Sends a personalized weekly digest of upcoming events to all community members, 
 
 `0 9 * * 1` — Every Monday at 9:00 AM (Europe/Brussels)
 
-## Manual trigger (for testing)
+## Manual trigger
 
 ```bash
-codika trigger scheduled-event-weekly-digest
+codika trigger scheduled-event-weekly-digest --poll
 ```
 
-No payload required.
+No payload required. The CLI creates an execution upfront — `--poll` works exactly like HTTP triggers.
 
 ## Notes
 

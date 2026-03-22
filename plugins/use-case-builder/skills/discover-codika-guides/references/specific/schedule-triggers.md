@@ -409,6 +409,22 @@ The `path` in the Webhook node must match the path portion of `manualTriggerUrl`
 
 Note: The Webhook node path omits the base URL and `/webhook/` prefix - it only includes the unique path portion.
 
+### CLI Triggering
+
+Scheduled workflows with `manualTriggerUrl` can be triggered from the CLI:
+
+```bash
+codika trigger <workflowId> --poll
+```
+
+The CLI creates an execution document upfront and passes `executionMetadata` in the POST body to the `manualTriggerUrl`. The Codika Init node detects the pre-created execution and enters **passthrough mode** (skips calling `createWorkflowExecution`). This means:
+
+- `--poll` works exactly like HTTP triggers
+- The CLI returns a real `executionId` immediately
+- The execution is tracked in Firestore from the start
+
+When the same workflow runs on its cron schedule (no incoming body), Codika Init enters **create mode** as usual — no behavior change for automatic runs.
+
 ---
 
 ## 12. Checklist

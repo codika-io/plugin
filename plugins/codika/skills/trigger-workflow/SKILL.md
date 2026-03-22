@@ -14,7 +14,11 @@ Trigger a deployed Codika workflow and optionally poll for results.
 
 ## Resolving the Workflow ID
 
-The `workflowId` is the `workflowTemplateId` from `config.ts`. If the user provides a use case folder path, read `config.ts` to find the available workflow IDs and their trigger types. Only workflows with `trigger.type === 'http'` can be triggered with this command.
+The `workflowId` is the `workflowTemplateId` from `config.ts`. If the user provides a use case folder path, read `config.ts` to find the available workflow IDs and their trigger types.
+
+**Supported trigger types:**
+- **HTTP triggers** (`trigger.type === 'http'`): Triggered with optional payload
+- **Schedule triggers** (`trigger.type === 'schedule'`): Triggered via the `manualTriggerUrl` configured in `config.ts`. The CLI creates an execution document upfront and passes it to the workflow, so `--poll` works exactly like HTTP triggers. No payload is needed.
 
 ## Using the CLI (Recommended)
 
@@ -104,6 +108,9 @@ codika trigger proposal-generation \
   --poll --payload-file - <<'EOF'
 {"text": "test"}
 EOF
+
+# Trigger a scheduled workflow manually (no payload needed)
+codika trigger daily-report --poll
 ```
 
 ## Interpreting Results
@@ -114,10 +121,13 @@ EOF
 
 ## Key Notes
 
-- Only workflows with `trigger.type === 'http'` can be triggered
+- Both HTTP and schedule triggers are supported
+- Schedule triggers require a `manualTriggerUrl` in config.ts (with a matching Webhook node in the workflow JSON)
 - `workflowId` is the `workflowTemplateId` from config.ts
-- Request body wraps data in `{"payload": {...}}`
-- Execution is async — trigger returns immediately
+- For HTTP triggers: request body wraps data in `{"payload": {...}}`
+- For schedule triggers: no payload needed (the workflow runs its own logic)
+- Execution is async — trigger returns immediately with an `executionId`
+- `--poll` works for both trigger types
 - Use `codika get execution <executionId>` for full n8n execution details
 
 ## Error Reference
