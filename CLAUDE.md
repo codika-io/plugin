@@ -68,6 +68,7 @@ Skills for the `codika` CLI (`codika`). Pure documentation — no code, no depen
 | `fetch-use-case` | Download a deployed use case via `codika get use-case` |
 | `trigger-workflow` | Trigger a workflow via `codika trigger` |
 | `get-execution` | Fetch execution details via `codika get execution` |
+| `get-instance` | Fetch instance details via `codika get instance` |
 | `list-executions` | List recent executions via `codika list executions` |
 | `manage-integrations` | Manage integrations (set, list, delete) via `codika integration` |
 
