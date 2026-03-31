@@ -19,7 +19,7 @@ Retrieve the current state of a deployed process instance, including its deploym
 
 - `codika` CLI installed and authenticated (see `setup-codika` skill)
 - A deployed process instance (via `deploy-use-case` skill or the dashboard)
-- API key with `executions:read` scope
+- API key with `instances:read` scope
 
 ## Typical Workflow
 
