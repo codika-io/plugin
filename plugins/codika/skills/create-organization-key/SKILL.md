@@ -35,7 +35,7 @@ codika organization create-key --organization-id <id> --name <name> --scopes <sc
 
 ### Available Scopes
 
-`deploy:use-case`, `deploy:data-ingestion`, `projects:create`, `workflows:trigger`, `executions:read`, `instances:read`, `skills:read`, `integrations:manage`, `api-keys:manage`
+`deploy:use-case`, `deploy:data-ingestion`, `projects:create`, `workflows:trigger`, `executions:read`, `instances:read`, `instances:manage`, `skills:read`, `integrations:manage`, `api-keys:manage`
 
 ### Optional Options
 
