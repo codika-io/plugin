@@ -47,6 +47,7 @@ codika get instance [processInstanceId] [options]
 | `--path <path>` | Path to a use case folder containing the project file |
 | `--project-file <path>` | Custom project file path (default: `project.json`) |
 | `--environment <env>` | Environment: `dev` (default) or `prod` |
+| `--workflows` | Show expanded workflow details (triggers, activation status, cost) |
 | `--api-url <url>` | Override API URL |
 | `--api-key <key>` | Override API key |
 | `--profile <name>` | Use a specific profile |
@@ -82,6 +83,12 @@ codika get instance --path ./my-use-case --environment prod
 codika get instance 019d312f-517c-726e-83ac-b678f2ad6afc
 ```
 
+**Expanded workflow details (triggers, activation, cost):**
+
+```bash
+codika get instance --workflows
+```
+
 **JSON output for scripting:**
 
 ```bash
@@ -108,6 +115,19 @@ codika get instance --environment prod --json
     - http-process-receipt (n8n: NGC6dwX7WL1F29DI)
     - http-get-receipts (n8n: XE4RRqOIaJF1m8Fu)
 ```
+
+**With `--workflows` flag (expanded):**
+
+```
+  Workflows:
+    competitor-news-monitoring
+      n8n ID:     pE5dKk7zbLQ6hdLg
+      Active:     yes
+      Triggers:   http (POST), schedule (0 8 * * *)
+      Cost:       25 credits
+```
+
+The expanded view adds per-workflow: `n8nWorkflowIsActive`, `triggers` (type + config), `cost`, and `integrationUids`. Without `--workflows`, only `workflowId`, `n8nWorkflowId`, and `workflowName` are returned (backward compatible).
 
 ## Error Handling
 

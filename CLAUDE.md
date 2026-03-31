@@ -25,7 +25,10 @@ This is a **marketplace** — it contains multiple independent plugins, each wit
 │   │       ├── publish-use-case/
 │   │       ├── redeploy-use-case/
 │   │       ├── verify-use-case/
-│   │       └── manage-integrations/
+│   │       ├── manage-integrations/
+│   │       ├── list-projects/
+│   │       ├── get-project/
+│   │       └── update-organization-key/
 │   └── use-case-builder/         # Autonomous use case agents
 │       ├── .claude-plugin/
 │       │   └── plugin.json
@@ -71,8 +74,11 @@ Skills for the `codika` CLI (`codika`). Pure documentation — no code, no depen
 | `get-instance` | Fetch instance details via `codika get instance` |
 | `list-executions` | List recent executions via `codika list executions` |
 | `list-instances` | List all process instances via `codika list instances` |
+| `list-projects` | List all projects via `codika list projects` |
+| `get-project` | Fetch project details via `codika get project` |
 | `instance-activate` | Activate or deactivate instances via `codika instance activate/deactivate` |
 | `manage-integrations` | Manage integrations (set, list, delete) via `codika integration` |
+| `update-organization-key` | Update an organization API key via `codika organization update-key` |
 
 ### use-case-builder (`plugins/use-case-builder/`)
 
