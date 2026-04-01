@@ -341,6 +341,10 @@ Triggers define how workflows are started. Each trigger type has different setup
 {{ORGSECRET_N8N_BASE_URL_TERCESORG}}/webhook/{{PROCDATA_PROCESS_ID_ATADCORP}}/{{USERDATA_PROCESS_INSTANCE_UID_ATADRESU}}/your-endpoint
 ```
 
+**Webhook endpoint security:** All webhook nodes **must** use `authentication: "headerAuth"` with the Codika webhook auth credential. This ensures only the Codika platform can trigger n8n workflows — direct calls without the auth header are rejected with 403. The credential placeholders are:
+- `{{ORGSECRET_WEBHOOK_AUTH_CRED_ID_TERCESORG}}` — credential ID
+- `{{ORGSECRET_WEBHOOK_AUTH_CRED_NAME_TERCESORG}}` — credential name
+
 → See [http-triggers.md](./specific/http-triggers.md) for HTTP trigger implementation
 
 #### Public API Access (External Triggering)

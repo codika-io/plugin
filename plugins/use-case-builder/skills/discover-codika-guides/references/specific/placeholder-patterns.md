@@ -140,6 +140,10 @@ Credentials shared across all organization members.
 |---------|-------------|
 | `{{ORGSECRET_N8N_BASE_URL_TERCESORG}}` | n8n base URL for organization |
 | `{{ORGSECRET_ERROR_WORKFLOW_ID_TERCESORG}}` | n8n error workflow ID for error handling |
+| `{{ORGSECRET_WEBHOOK_AUTH_CRED_ID_TERCESORG}}` | n8n httpHeaderAuth credential ID for webhook endpoint security |
+| `{{ORGSECRET_WEBHOOK_AUTH_CRED_NAME_TERCESORG}}` | n8n httpHeaderAuth credential name for webhook endpoint security |
+
+The `WEBHOOK_AUTH_CRED_ID` and `WEBHOOK_AUTH_CRED_NAME` placeholders are **mandatory** on all `n8n-nodes-base.webhook` nodes. They reference an `httpHeaderAuth` credential created per organization that ensures only the Codika platform can trigger n8n workflows directly. Without these, webhook endpoints would be publicly accessible.
 
 ---
 

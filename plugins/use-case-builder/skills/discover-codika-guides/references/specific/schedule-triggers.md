@@ -362,8 +362,15 @@ You must add a Webhook node to your workflow JSON that listens at the same path 
   "parameters": {
     "httpMethod": "POST",
     "path": "={{PROCDATA_PROCESS_ID_ATADCORP}}/{{USERDATA_PROCESS_INSTANCE_UID_ATADRESU}}/your-workflow-manual",
+    "authentication": "headerAuth",
     "responseMode": "onReceived",
     "options": {}
+  },
+  "credentials": {
+    "httpHeaderAuth": {
+      "id": "{{ORGSECRET_WEBHOOK_AUTH_CRED_ID_TERCESORG}}",
+      "name": "{{ORGSECRET_WEBHOOK_AUTH_CRED_NAME_TERCESORG}}"
+    }
   },
   "id": "manual-trigger-webhook-001",
   "name": "Manual Trigger Webhook",

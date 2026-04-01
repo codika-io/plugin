@@ -115,7 +115,14 @@ The n8n Webhook node must match the URL pattern:
   "parameters": {
     "httpMethod": "POST",
     "path": "{{PROCDATA_PROCESS_ID_ATADCORP}}/{{USERDATA_PROCESS_INSTANCE_UID_ATADRESU}}/your-endpoint",
+    "authentication": "headerAuth",
     "responseMode": "lastNode"
+  },
+  "credentials": {
+    "httpHeaderAuth": {
+      "id": "{{ORGSECRET_WEBHOOK_AUTH_CRED_ID_TERCESORG}}",
+      "name": "{{ORGSECRET_WEBHOOK_AUTH_CRED_NAME_TERCESORG}}"
+    }
   },
   "name": "HTTP Trigger",
   "type": "n8n-nodes-base.webhook",
@@ -123,7 +130,9 @@ The n8n Webhook node must match the URL pattern:
 }
 ```
 
-**Important:** `responseMode` must be `"lastNode"`. This ensures the workflow completes before responding, allowing Codika Submit Result to properly return data.
+**Important:**
+- `responseMode` must be `"lastNode"`. This ensures the workflow completes before responding, allowing Codika Submit Result to properly return data.
+- `authentication` must be `"headerAuth"` with the `httpHeaderAuth` credential placeholders. This ensures only the Codika platform can trigger the webhook — direct calls to n8n without the auth header are rejected.
 
 ---
 
@@ -894,7 +903,14 @@ HTTP Trigger → Codika Init → Get Input → AI Analysis → IF Success
   "parameters": {
     "httpMethod": "POST",
     "path": "{{PROCDATA_PROCESS_ID_ATADCORP}}/{{USERDATA_PROCESS_INSTANCE_UID_ATADRESU}}/analyze",
+    "authentication": "headerAuth",
     "responseMode": "lastNode"
+  },
+  "credentials": {
+    "httpHeaderAuth": {
+      "id": "{{ORGSECRET_WEBHOOK_AUTH_CRED_ID_TERCESORG}}",
+      "name": "{{ORGSECRET_WEBHOOK_AUTH_CRED_NAME_TERCESORG}}"
+    }
   },
   "name": "HTTP Trigger",
   "type": "n8n-nodes-base.webhook",
