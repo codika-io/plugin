@@ -59,7 +59,8 @@ codika deploy documents <path> [options]
 | `--project-file <path>` | Custom project file path (default: `project.json`) |
 | `--api-url <url>` | Override API URL |
 | `--api-key <key>` | Override API key |
-| `--json` | Output result as JSON |
+| `--profile <name>` | Use a specific profile |
+| `--json` | Output as JSON |
 
 ### Project ID Resolution
 

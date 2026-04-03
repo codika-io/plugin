@@ -55,7 +55,8 @@ codika get use-case <projectId> [outputPath] [options]
 | `--list` | List documents only without downloading |
 | `--api-url <url>` | Override API URL |
 | `--api-key <key>` | Override API key |
-| `--json` | Output result as JSON |
+| `--profile <name>` | Use a specific profile |
+| `--json` | Output as JSON |
 
 ## Examples
 

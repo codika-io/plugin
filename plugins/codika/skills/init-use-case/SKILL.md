@@ -44,6 +44,8 @@ codika init <path> [options]
 | `--project-file <path>` | Custom filename for the project file | `project.json`     |
 | `--api-url <url>`      | Override API URL                      | —                  |
 | `--api-key <key>`      | Override API key                      | —                  |
+| `--profile <name>`     | Use a specific profile                | —                  |
+| `--with-data-ingestion` | Scaffold a data-ingestion/ folder with template embedding workflow | — |
 | `--json`               | Output result as JSON                 | —                  |
 
 ## Examples

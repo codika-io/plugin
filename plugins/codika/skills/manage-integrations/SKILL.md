@@ -40,7 +40,13 @@ codika integration set postgres --secrets-file ./secrets.json --process-instance
 # Force overwrite existing
 codika integration set openai --secret OPENAI_API_KEY=sk-new --force
 
-# Custom integration (cstm_* prefix)
+# Custom integration (cstm_* prefix) — auto-extracts schema from config.ts
+codika integration set cstm_weather_api \
+  --secret API_KEY=xxx \
+  --path ./my-use-case \
+  --json
+
+# Custom integration with explicit schema file (fallback)
 codika integration set cstm_weather_api \
   --secret API_KEY=xxx \
   --process-instance-id <id> \
@@ -51,6 +57,28 @@ codika integration set cstm_weather_api \
 1. `--secrets-file path.json` — lowest priority
 2. `--secrets '{"KEY":"VALUE"}'` — middle priority
 3. `--secret KEY=VALUE` (repeatable) — highest priority
+
+#### Custom Integrations (cstm_* prefix)
+
+Custom integrations require a schema that defines their fields and n8n credential mapping. The CLI auto-extracts this schema from the `customIntegrations` array in `config.ts` when `--path` is provided (or when run from a use case folder).
+
+**Recommended approach — use `--path`:**
+```bash
+codika integration set cstm_acme_crm \
+  --secret API_KEY=xxx \
+  --path ./my-use-case \
+  --json
+```
+
+The CLI reads `config.ts`, finds the `cstm_acme_crm` entry in `customIntegrations`, and uses it as the schema automatically. No separate schema file needed.
+
+**Fallback — explicit schema file** (when config.ts is not available):
+```bash
+codika integration set cstm_acme_crm \
+  --secret API_KEY=xxx \
+  --custom-schema-file ./schema.json \
+  --process-instance-id <id>
+```
 
 ### List Integrations
 
@@ -129,13 +157,18 @@ When an agent needs to configure integrations after deploying a use case:
 # 1. Deploy the use case
 codika deploy use-case ./my-use-case --json
 
-# 2. Set required integrations
+# 2. Set required integrations (built-in)
 codika integration set openai --secrets '{"OPENAI_API_KEY":"sk-xxx"}' --json
 codika integration set supabase \
   --secrets '{"SUPABASE_HOST":"https://xxx.supabase.co","SUPABASE_SERVICE_ROLE_KEY":"eyJ..."}' \
   --path ./my-use-case --json
 
-# 3. Redeploy to activate
+# 3. Set custom integrations (schema auto-extracted from config.ts)
+codika integration set cstm_acme_crm \
+  --secrets '{"API_KEY":"acme_sk_xxx"}' \
+  --path ./my-use-case --json
+
+# 4. Redeploy to activate
 codika redeploy --path ./my-use-case --force --json
 ```
 

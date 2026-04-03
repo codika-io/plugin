@@ -44,23 +44,26 @@ my-use-case/
 codika deploy process-data-ingestion <path> [options]
 ```
 
-### Version Strategy
+### Version Flags
 
-| Flag | Strategy | Description |
-|------|----------|-------------|
-| _(default)_ | `minor_bump` | Minor version bump (1.0 -> 1.1) |
-| `--version-strategy major_bump` | `major_bump` | Major version bump (1.0 -> 2.0) |
-| `--version-strategy minor_bump` | `minor_bump` | Minor version bump |
-| `--version-strategy explicit` | `explicit` | Deploy to explicit version (requires `--explicit-version`) |
+| Flag | API Strategy | Local Bump | Description |
+|------|-------------|------------|-------------|
+| _(default)_ / `--patch` | `minor_bump` | patch | Patch bump (1.0.0 → 1.0.1) |
+| `--minor` | `minor_bump` | minor | Minor bump (1.0.1 → 1.1.0) |
+| `--major` | `major_bump` | major | Major bump (1.1.0 → 2.0.0) |
+| `--target-version <X.Y>` | `explicit` | patch | Deploy to explicit API version |
 
 ### Options
 
 | Flag | Description |
 |------|-------------|
-| `--version-strategy <strategy>` | Version strategy: `major_bump`, `minor_bump`, or `explicit` (default: `minor_bump`) |
-| `--explicit-version <version>` | Explicit version (required if strategy is `explicit`) |
+| `--patch` | Patch version bump (default) |
+| `--minor` | Minor version bump |
+| `--major` | Major version bump |
+| `--target-version <version>` | Deploy to explicit API version (e.g., `3.0`) |
 | `--project-id <id>` | Override project ID |
 | `--project-file <path>` | Custom project file path (default: `project.json`) |
+| `--profile <name>` | Use a specific profile instead of the active one |
 | `--api-url <url>` | Override API URL |
 | `--api-key <key>` | Override API key |
 | `--json` | Output result as JSON |
@@ -76,13 +79,13 @@ codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case
 **Major version bump:**
 
 ```bash
-codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case --version-strategy major_bump
+codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case --major
 ```
 
 **Explicit version:**
 
 ```bash
-codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case --version-strategy explicit --explicit-version 3.0
+codika deploy process-data-ingestion ./use-cases/marketplace/my-use-case --target-version 3.0
 ```
 
 **JSON output:**
@@ -158,7 +161,7 @@ Data ingestion has its **own version line**, separate from use case deployments:
 | Scope | Per-user instance (dev/prod) | Per-process (shared by all users) |
 | Versioning | Semantic (X.Y.Z) + API (X.Y) | Simple (X.Y) + local (X.Y.Z) |
 | Notifications | Triggers "update available" | Does NOT trigger notifications |
-| Version flag | `--patch`, `--minor`, `--major` | `--version-strategy` |
+| Version flags | `--patch`, `--minor`, `--major`, `--target-version` | `--patch`, `--minor`, `--major`, `--target-version` |
 | Tracking key | `deployments` in project.json | `dataIngestionDeployments` in project.json |
 
 ## Error Handling

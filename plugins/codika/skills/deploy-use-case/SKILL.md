@@ -109,7 +109,7 @@ codika deploy use-case <path> [options]
 | `--major` | `major_bump` | major | Major bump (1.1.0 → 2.0.0) |
 | `--target-version <X.Y>` | `explicit` | patch | Deploy to explicit API version |
 
-**Important:** Use `--patch`, `--minor`, or `--major` for version bumping (not `--version-strategy`, which is only for `deploy process-data-ingestion`). The `--target-version <X.Y>` flag sets an explicit API version.
+**Important:** Use `--patch`, `--minor`, or `--major` for version bumping. The `--target-version <X.Y>` flag sets an explicit API version. Both `deploy use-case` and `deploy process-data-ingestion` use the same version flags.
 
 ### Other Options
 
@@ -122,6 +122,7 @@ codika deploy use-case <path> [options]
 | `--profile <name>` | Use a specific profile instead of the active one |
 | `--additional-file <abs:rel>` | Add extra file (repeatable). Format: `absolutePath:relativePath` |
 | `--json` | Output result as JSON |
+| `--dry-run` | Preview what would be deployed without calling the API |
 
 ## Examples
 

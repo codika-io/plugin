@@ -62,7 +62,8 @@ codika publish <templateId> [options]
 | `--skip-prod-instance` | Skip creating a production process instance | Off |
 | `--api-url <url>` | Override API URL | — |
 | `--api-key <key>` | Override API key | — |
-| `--json` | Output result as JSON | — |
+| `--profile <name>` | Use a specific profile | — |
+| `--json` | Output as JSON | — |
 
 ## Finding the Template ID
 

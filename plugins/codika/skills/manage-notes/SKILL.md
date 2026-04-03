@@ -95,7 +95,8 @@ Content can also be piped via stdin: `echo "..." | codika notes upsert <projectI
 | `--agent-id <id>` | Agent identifier (for tracking who wrote it) |
 | `--major-change` | Bump MINOR version instead of PATCH |
 | `--api-key <key>` | Override API key |
-| `--json` | JSON output |
+| `--profile <name>` | Use a specific profile |
+| `--json` | Output as JSON |
 
 ### List Documents
 
@@ -109,7 +110,8 @@ codika notes list <projectId> [options]
 |------|-------------|
 | `--type <type>` | Filter by document type ID |
 | `--api-key <key>` | Override API key |
-| `--json` | JSON output |
+| `--profile <name>` | Use a specific profile |
+| `--json` | Output as JSON |
 
 ### Get a Document
 
@@ -125,7 +127,8 @@ codika notes get <projectId> --type <type> [options]
 | `--target-version <version>` | Get a specific version (e.g. `0.1.0`) |
 | `--history` | Show all versions instead of just the current one |
 | `--api-key <key>` | Override API key |
-| `--json` | JSON output |
+| `--profile <name>` | Use a specific profile |
+| `--json` | Output as JSON |
 
 ## Examples
 
