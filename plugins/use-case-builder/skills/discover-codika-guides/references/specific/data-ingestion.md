@@ -708,7 +708,7 @@ The first node after the webhook trigger. Extracts document metadata from the we
   "namespace": "process_xyz or instanceId",
   "processId": "",
   "processInstanceId": "instanceId or empty",
-  "callbackUrl": "https://europe-west1-codika-app.cloudfunctions.net/submitEmbeddingResult",
+  "callbackUrl": "https://api.codika.io/submitembeddingresult",
   "embeddingSecret": "uuid-v4",
   "hasCallback": true,
   "dataIngestionId": "",
@@ -815,7 +815,7 @@ The callback node automatically reads and forwards these fields to the `submitEm
 
 Both process-level and instance-level DI use the same callback endpoint: `submitEmbeddingResult`.
 
-**URL:** `https://europe-west1-codika-app.cloudfunctions.net/submitEmbeddingResult`
+**URL:** `https://api.codika.io/submitembeddingresult`
 
 **Method:** POST
 

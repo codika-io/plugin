@@ -511,16 +511,16 @@ Using incorrect Cloud Functions domain in hardcoded URLs.
 
 **Common Mistake:**
 ```javascript
-// ❌ WRONG - Incorrect domain
-const uploadUrl = 'https://europe-west1-codika-app-platform.cloudfunctions.net/uploadWorkflowOutput';
+// ❌ WRONG - Old domain
+const uploadUrl = 'https://europe-west1-codika-app.cloudfunctions.net/uploadworkflowoutput';
 
-// ✅ CORRECT - Right domain
-const uploadUrl = 'https://europe-west1-codika-app.cloudfunctions.net/uploadWorkflowOutput';
+// ✅ CORRECT - Use the API gateway
+const uploadUrl = 'https://api.codika.io/uploadworkflowoutput';
 ```
 
 **Domain Patterns:**
-- ❌ `codika-app-platform.cloudfunctions.net` (incorrect)
-- ✅ `codika-app.cloudfunctions.net` (correct)
+- ❌ `europe-west1-codika-app.cloudfunctions.net` (old, blocked by ingress)
+- ✅ `api.codika.io` (correct — goes through LB + Cloud Armor)
 
 **Solution:**
 1. **Verify the project ID** in Firebase Console
@@ -528,9 +528,9 @@ const uploadUrl = 'https://europe-west1-codika-app.cloudfunctions.net/uploadWork
    ```bash
    gcloud functions list --region=europe-west1
    ```
-3. **Use correct domain format:**
+3. **Use the API gateway domain:**
    ```
-   https://{region}-{project-id}.cloudfunctions.net/{functionName}
+   https://api.codika.io/{functionName}
    ```
 
 **Prevention:**
