@@ -122,7 +122,7 @@ codika notes get <projectId> --type <type> [options]
 | Flag | Description |
 |------|-------------|
 | `--type <type>` | **(Required)** Document type ID |
-| `--version <version>` | Get a specific version (e.g. `0.1.0`) |
+| `--target-version <version>` | Get a specific version (e.g. `0.1.0`) |
 | `--history` | Show all versions instead of just the current one |
 | `--api-key <key>` | Override API key |
 | `--json` | JSON output |

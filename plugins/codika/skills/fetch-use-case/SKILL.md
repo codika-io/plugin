@@ -48,7 +48,7 @@ codika get use-case <projectId> [outputPath] [options]
 
 | Flag | Description |
 |------|-------------|
-| `--version <version>` | Fetch a specific version in `X.Y` format (fetches latest if omitted) |
+| `--target-version <version>` | Fetch a specific version in `X.Y` format (fetches latest if omitted) |
 | `--with-data-ingestion` | Include data ingestion workflow (default: true) |
 | `--no-data-ingestion` | Exclude data ingestion workflow |
 | `--di-version <version>` | Data ingestion version in `X.Y` format (latest if omitted) |
@@ -56,8 +56,6 @@ codika get use-case <projectId> [outputPath] [options]
 | `--api-url <url>` | Override API URL |
 | `--api-key <key>` | Override API key |
 | `--json` | Output result as JSON |
-
-**Note:** Use `--version` (not `--cli-version`). The global CLI version flag is `-V` / `--cli-version`, so `--version` on subcommands is reserved for specifying the use case version.
 
 ## Examples
 
@@ -70,7 +68,7 @@ codika get use-case my-project-id ./restored
 **Fetch a specific version:**
 
 ```bash
-codika get use-case my-project-id ./restored --version 1.0
+codika get use-case my-project-id ./restored --target-version 1.0
 ```
 
 **List documents only (no download):**
@@ -148,7 +146,7 @@ Fetching use case my-project-id...
 |-------|-------|-----|
 | "API key is required" | Not authenticated | Run `codika login` (see `setup-codika` skill) |
 | "Project not found" | Invalid or non-existent project ID | Verify the project ID from the Codika dashboard or `project.json` |
-| "Invalid version format" | Malformed `--version` value | Use `X.Y` format (e.g., `1.0`, `2.1`) |
+| "Invalid version format" | Malformed `--target-version` value | Use `X.Y` format (e.g., `1.0`, `2.1`) |
 | 401 / Unauthorized | Invalid or expired API key | Re-run `codika login` |
 
 ## Authentication

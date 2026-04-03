@@ -107,11 +107,9 @@ codika deploy use-case <path> [options]
 | _(default)_ / `--patch` | `minor_bump` | patch | Patch bump (1.0.0 → 1.0.1) |
 | `--minor` | `minor_bump` | minor | Minor bump (1.0.1 → 1.1.0) |
 | `--major` | `major_bump` | major | Major bump (1.1.0 → 2.0.0) |
-| `--version <X.Y>` | `explicit` | patch | Deploy to explicit API version |
+| `--target-version <X.Y>` | `explicit` | patch | Deploy to explicit API version |
 
-**Important:** Use `--patch`, `--minor`, or `--major` for version bumping (not `--version-strategy`, which is only for `deploy process-data-ingestion`). The `--version <X.Y>` flag sets an explicit API version.
-
-**Note:** The global CLI version flag is `-V` / `--cli-version`, so `--version` on this subcommand is reserved for specifying the deployment version.
+**Important:** Use `--patch`, `--minor`, or `--major` for version bumping (not `--version-strategy`, which is only for `deploy process-data-ingestion`). The `--target-version <X.Y>` flag sets an explicit API version.
 
 ### Other Options
 
@@ -148,7 +146,7 @@ codika deploy use-case ./use-cases/marketplace/my-use-case --major
 **Deploy to explicit API version:**
 
 ```bash
-codika deploy use-case ./use-cases/marketplace/my-use-case --version 2.0
+codika deploy use-case ./use-cases/marketplace/my-use-case --target-version 2.0
 ```
 
 **With additional metadata file:**
@@ -234,7 +232,7 @@ Stores version mapping history per project:
 | "No project ID found" | No project.json or PROJECT_ID | Run `codika project create --name "..." --path <path>` or add `project.json` |
 | "config.ts must export getConfiguration" | Missing export | Ensure `config.ts` exports a `getConfiguration()` function |
 | 401 / Unauthorized | Invalid API key | Re-run `codika login` or check `codika whoami` |
-| "Invalid version format" | Bad `--version` value | Use `X.Y` format (e.g., `--version 1.0`) |
+| "Invalid version format" | Bad `--target-version` value | Use `X.Y` format (e.g., `--target-version 1.0`) |
 
 ## Exit Codes
 

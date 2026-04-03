@@ -174,7 +174,7 @@ codika deploy process-data-ingestion use-cases/your-use-case --minor
 codika deploy process-data-ingestion use-cases/your-use-case --major
 
 # Explicit version
-codika deploy process-data-ingestion use-cases/your-use-case --version 2.0
+codika deploy process-data-ingestion use-cases/your-use-case --target-version 2.0
 ```
 
 The CLI reads `getDataIngestionConfig()` from `config.ts` and auto-discovers the workflow JSON file from the `data-ingestion/` folder (expects exactly one `.json` file).
