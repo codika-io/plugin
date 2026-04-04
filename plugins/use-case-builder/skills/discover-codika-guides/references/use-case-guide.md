@@ -360,7 +360,7 @@ HTTP trigger workflows can also be triggered externally without Firebase authent
 **Trigger endpoint:**
 
 ```
-POST https://api.codika.io/triggerwebhookpublic/{processInstanceId}/{workflowId}
+POST https://api.codika.io/webhook/{processInstanceId}/{workflowId}
 Header: X-API-Key: ck_...
 Body: { "payload": { "field1": "value1" } }
 → Returns: { "success": true, "executionId": "..." }
@@ -371,7 +371,7 @@ The `payload` wrapper is recommended but not required. If no `payload` key is pr
 **Status polling endpoint:**
 
 ```
-GET https://api.codika.io/getexecutionstatuspublic/{processInstanceId}/{executionId}
+GET https://api.codika.io/status/{processInstanceId}/{executionId}
 Header: X-API-Key: ck_...
 → Returns: { "execution": { "status": "success", "resultData": {...} } }
 ```
