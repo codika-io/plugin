@@ -44,7 +44,7 @@ At least one of `--scopes`, `--name`, or `--description` must be provided.
 
 ### Available Scopes
 
-`deploy:use-case`, `deploy:data-ingestion`, `projects:create`, `projects:read`, `workflows:trigger`, `executions:read`, `instances:read`, `instances:manage`, `skills:read`, `integrations:manage`, `api-keys:manage`
+`deploy:use-case`, `projects:create`, `projects:read`, `workflows:trigger`, `executions:read`, `instances:read`, `instances:manage`, `skills:read`, `integrations:manage`, `api-keys:manage`
 
 ## Examples
 
