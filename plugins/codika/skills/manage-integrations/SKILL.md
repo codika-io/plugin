@@ -80,6 +80,23 @@ codika integration set cstm_acme_crm \
   --process-instance-id <id>
 ```
 
+### Fetch Credential Schema
+
+Use this to discover which fields a given n8n credential type requires. Useful when creating custom integrations with native n8n credential types (not just httpHeaderAuth).
+
+```bash
+# See what fields a credential type needs
+codika integration schema twilioApi
+
+# Raw JSON (for automation)
+codika integration schema openAiApi --json
+
+# Use it to build a custom integration mapping
+codika integration schema supabaseApi --json
+```
+
+The `n8nCredentialType` in custom integrations now accepts **any valid n8n credential type** (not just `httpHeaderAuth`, `httpBasicAuth`, `httpQueryAuth`). Use `schema` to discover the exact fields for any type.
+
 ### List Integrations
 
 ```bash

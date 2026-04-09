@@ -709,13 +709,12 @@ interface CustomIntegrationSchema {
   /** Where this integration is stored */
   contextType: 'organization' | 'member' | 'process_instance';
   /**
-   * n8n credential type to create:
-   * - 'httpHeaderAuth': API key in HTTP header
-   * - 'httpBasicAuth': Username + password
-   * - 'httpQueryAuth': API key as query parameter
-   * - 'none': No n8n credential (metadata only)
+   * n8n credential type to create.
+   * Any valid n8n credential type (e.g. 'httpHeaderAuth', 'twilioApi', 'openAiApi')
+   * or 'none' for no n8n credential.
+   * Use `codika integration schema <type>` to discover available types and their fields.
    */
-  n8nCredentialType: 'httpHeaderAuth' | 'httpBasicAuth' | 'httpQueryAuth' | 'none';
+  n8nCredentialType: string;
   /** Maps secret/metadata field keys to n8n credential data field names */
   n8nCredentialMapping?: Record<string, string>;
   /** Secret fields (encrypted, stored securely) */
@@ -828,10 +827,49 @@ export function getConfiguration(): ProcessDeploymentConfigurationInput {
 
 Custom integration IDs listed in `customIntegrations` are automatically merged into `integrationUids` during deployment. You can also explicitly list them in `integrationUids` for clarity, but it is not required.
 
+### Using Native n8n Credential Types
+
+Custom integrations can use **any n8n credential type**, not just HTTP auth types. Use `codika integration schema <type>` to discover which fields a credential type requires, then map them with `n8nCredentialMapping`:
+
+```bash
+# Discover the fields for twilioApi
+codika integration schema twilioApi
+```
+
+Example with a native n8n type:
+
+```typescript
+customIntegrations: [
+  {
+    id: 'cstm_my_twilio',
+    name: 'My Twilio',
+    contextType: 'organization',
+    n8nCredentialType: 'twilioApi',  // Any valid n8n credential type
+    n8nCredentialMapping: {
+      ACCOUNT_SID: 'accountSid',
+      AUTH_TOKEN: 'authToken',
+      AUTH_TYPE: 'authType',
+      ALLOWED_DOMAINS: 'allowedDomains',
+    },
+    secretFields: [
+      { key: 'ACCOUNT_SID', label: 'Account SID', type: 'string', required: true },
+      { key: 'AUTH_TOKEN', label: 'Auth Token', type: 'password', required: true },
+    ],
+    metadataFields: [
+      { key: 'AUTH_TYPE', label: 'Auth Type', type: 'string', placeholder: 'authToken' },
+      { key: 'ALLOWED_DOMAINS', label: 'Allowed Domains', type: 'string', placeholder: '' },
+    ],
+    icon: 'Phone',
+    color: '#F22F46',
+  },
+],
+```
+
 ---
 
 ## Related Documentation
 
+- [integration-reference.md](./integration-reference.md) - Complete integration reference: all built-in integrations, credential types, placeholder patterns, CLI fields, and built-in vs custom comparison
 - [http-triggers.md](./http-triggers.md) - Trigger and schema details
 - [schedule-triggers.md](./schedule-triggers.md) - Schedule trigger config
 - [third-party-triggers.md](./third-party-triggers.md) - Service event trigger workflows (Gmail, Slack, Calendly, etc.)
