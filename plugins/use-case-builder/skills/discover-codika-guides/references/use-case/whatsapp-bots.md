@@ -1,438 +1,67 @@
-# WhatsApp Bot Development Guide
+# WhatsApp Bots — Start Here
 
-This guide documents best practices and lessons learned from building WhatsApp bots with AI agents, specifically the multi-role community bot pattern.
+This is the landing page. It helps you pick between the two canonical WhatsApp-bot architectures on Codika. Once you've picked, go read the matching deep guide — it will give you everything you need to build, deploy, and debug.
 
----
-
-## 1. Architecture Overview
+## The two patterns
 
-### Twilio Integration (Not Direct WhatsApp)
+| Pattern | One-line summary | Canonical codebase | Go to |
+|---|---|---|---|
+| **Multi-tenant** | One orchestrator process routes inbound WhatsApp by phone → `bots.subworkflow_id` into **a separate Codika process per client**. Each tenant has isolated credentials + their own Postgres schema. | `satellites/codika-client-bots` (also `codika-bot-factory`) | [`whatsapp-bots-multi-tenant.md`](./whatsapp-bots-multi-tenant.md) |
+| **Single-tenant** | One Codika process contains everything — a main-router + multiple role-based AI agent handlers (admin / resident / community / onboarding / …). Shared DB, shared credentials. "Multiple agents" = multiple AI agent roles in the same process, NOT multiple processes. | `satellites/whatsapp-bots/instances/wat-dashboard/processes/wat-bot` | [`whatsapp-bots-single-tenant.md`](./whatsapp-bots-single-tenant.md) |
 
-**Important:** We use **Twilio** as the messaging provider for WhatsApp, not direct WhatsApp Business API integration.
+## How to choose
 
-**Why Twilio?**
-- Easier setup and management
-- Unified API for SMS and WhatsApp
-- Built-in n8n nodes (`n8n-nodes-base.twilio`)
-- Handles WhatsApp Business API complexity
-
-**Setup requirements:**
-1. Twilio account with WhatsApp Sandbox or approved sender
-2. Twilio credentials configured as organization credential (`ORGCRED_TWILIO`)
-3. Webhook URL configured in Twilio to receive incoming messages
-
-### Multi-Role Bot Pattern
+Answer these questions in order:
 
-A single WhatsApp number (via Twilio) can serve multiple user roles by routing messages through a main router:
+1. **Will this bot eventually serve multiple distinct clients / companies / customers**, each of whom must NOT see each other's data? → **Multi-tenant**.
+2. **Do different user types (admins, members, guests, …) need different tool access and different system prompts**, but they all belong to the same organization with shared data? → **Single-tenant**.
+3. **Are you just prototyping one bot for one audience with no role distinctions?** → **Single-tenant**, start with one handler and grow.
 
-```text
-Incoming Message (Twilio Webhook) -> Main Router -> Role Detection -> Handler (Admin/Resident/Community/Not Found)
-```
-
-Each handler has its own:
-- AI agent with role-specific system prompt
-- Set of available tools
-- Context documents (fetched from database)
-- Memory window for conversation continuity
-
----
-
-## 2. Handler Structure
-
-### Standard Handler Flow
-
-```text
-Trigger -> Fetch Context -> Parse Input -> AI Agent -> Prepare Response -> Send via Twilio -> Log Message -> Return Result
-```
-
-### Parse Input Node Pattern
-
-The Parse Input node should output ALL context needed by tools, including the caller's role:
-
-```javascript
-return [{
-  json: {
-    senderPhone: triggerInput.senderPhone,
-    twilioPhone: triggerInput.twilioPhone,
-    messageBody: triggerInput.messageBody,
-    userData: userData,
-    executionId: triggerInput.executionId,
-    executionSecret: triggerInput.executionSecret,
-    communityName: triggerInput.communityName || 'WAT',
-    residentContext: contextDoc?.content_markdown || '',
-    callerRole: 'resident',  // IMPORTANT: Hardcode the role for this handler
-    startTimeMs: Date.now()
-  }
-}];
-```
-
-**Key insight:** Each handler knows its role (admin/resident/community), so hardcode `callerRole` in the Parse Input output. This makes it available to all tools.
-
----
-
-## 3. AI Agent Tool Configuration (CRITICAL)
-
-### The Problem: Null Parameters
-
-When configuring AI agent tools that call sub-workflows, using the wrong parameter format causes values to arrive as `null`.
-
-**BROKEN pattern** (do NOT use):
-```json
-"specifyInputSchema": true,
-"inputSchema": "{ ... }",
-"fields": {
-  "values": [
-    { "name": "caller_role", "value": "resident" }
-  ]
-}
-```
-
-### The Solution: workflowInputs Format
-
-**CORRECT pattern** (always use this):
-```json
-"workflowInputs": {
-  "mappingMode": "defineBelow",
-  "value": {
-    "caller_role": "={{ $('Parse Input').first().json.callerRole }}"
-  },
-  "matchingColumns": [],
-  "schema": [
-    { "id": "caller_role", "displayName": "caller_role", "required": true, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string" }
-  ],
-  "attemptToConvertTypes": false,
-  "convertFieldsToString": false
-}
-```
-
-### Hardcode Context Parameters
-
-**CRITICAL:** Parameters known from the handler context should be hardcoded programmatically, NOT provided by the AI.
-
-| Parameter Type | Source | Example |
-|---------------|--------|---------|
-| `caller_phone` | From Parse Input | `$('Parse Input').first().json.senderPhone` |
-| `caller_role` | From Parse Input | `$('Parse Input').first().json.callerRole` |
-| `twilio_phone` | From Parse Input | `$('Parse Input').first().json.twilioPhone` |
-| `event_title` | From AI | `$fromAI('event_title', ...)` |
-| `participating` | From AI | `$fromAI('participating', ...)` |
-
-**Why?**
-1. **Security:** Prevents AI from spoofing user identity
-2. **Reliability:** Context values are always correct, not dependent on AI extraction
-3. **Simplicity:** AI only provides what it needs to (user intent), not redundant context
-
-### Complete Tool Configuration Example
-
-```json
-{
-  "parameters": {
-    "name": "list_events",
-    "description": "Get upcoming events. Use when user asks about events.",
-    "workflowId": {
-      "__rl": true,
-      "value": "{{SUBWKFL_tool-list-events_LFKWBUS}}",
-      "mode": "id"
-    },
-    "workflowInputs": {
-      "mappingMode": "defineBelow",
-      "value": {
-        "caller_role": "={{ $('Parse Input').first().json.callerRole }}"
-      },
-      "matchingColumns": [],
-      "schema": [
-        { "id": "caller_role", "displayName": "caller_role", "required": true, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string" }
-      ],
-      "attemptToConvertTypes": false,
-      "convertFieldsToString": false
-    }
-  },
-  "id": "tool-list-events-001",
-  "name": "List Events Tool",
-  "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-  "typeVersion": 2.1,
-  "position": [696, 272]
-}
-```
+Decision cheat-sheet:
 
----
+| Criterion | Multi-tenant | Single-tenant |
+|---|---|---|
+| Number of distinct client orgs | Many | One |
+| Credential isolation between tenants | Required | Not needed |
+| Per-tenant Postgres schema | Required (`creafid`, `acme`, …) | One shared schema |
+| Ops complexity | Higher — deploy.sh per tenant, `bots` + `phone_mappings` tables | Lower — one process, one deploy |
+| Shared Twilio number | Yes (one number routes to many tenants) | Yes (one number for the whole community) |
+| AI agent variety | Usually one agent per client bot | Multiple role-specific agents in one process |
+| Starting cost | Heavier (orchestrator + first tenant) | Lighter (one process) |
 
-## 4. Tool Sub-Workflow Design
+When in doubt, **default to single-tenant**. You can promote to multi-tenant later by extracting a handler into its own process and adding an orchestrator — the handler contract is identical.
 
-### Input Validation
+## Shared prerequisites (both patterns)
 
-Always validate inputs at the start of tool sub-workflows:
+Both architectures need the same platform plumbing. Details are inside each deep guide, but here are the non-negotiables:
 
-```javascript
-const callerRole = $('When Executed by Another Workflow').item.json.caller_role;
+1. **Twilio** (org-level credential, `ORGCRED_TWILIO`). Submit real SID + auth token via `codika integration set twilio --context-type organization`. Configure the inbound-message webhook for your Twilio number to point at Codika's n8n endpoint (the `twilioTrigger` node auto-registers this on workflow activation, but cycle the instance via `codika instance deactivate` then `activate` if you changed credentials after first deploy).
+2. **Postgres** (instance-level credential, `INSTCRED_POSTGRES`). Typically a Neon project with a pooled connection string.
+3. **AI provider** — Anthropic (flex, `FLEXCRED_ANTHROPIC`) for the agent, plus OpenAI if you need Whisper transcription for voice messages.
+4. **The `n8n_chat_histories` identity gotcha — read this or your agent will never reply.** If your dashboard's Drizzle schema defines the `n8n_chat_histories` table (used by `@n8n/n8n-nodes-langchain.memoryPostgresChat`), the integer `id` column MUST be declared with `.generatedAlwaysAsIdentity()`:
 
-if (!callerRole) {
-  return [{ json: { error: 'No caller_role provided', success: false } }];
-}
-```
+   ```ts
+   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+   ```
 
-### Visibility-Based Filtering
+   Without it, `drizzle-kit push` creates the column as `integer NOT NULL` with no sequence, and every chat-memory write fails silently with:
 
-For resources with visibility settings (events, documents, etc.), filter based on caller role:
+   ```
+   null value in column "id" of relation "n8n_chat_histories" violates not-null constraint
+   ```
 
-```javascript
-const visibleEvents = allEvents.filter(e => {
-  // Admins see everything
-  if (callerRole === 'admin') return true;
+   The agent then falls through to its error handler and the user sees the fallback message instead of the real response. See `product-builder/skills/setup-neon/SKILL.md §6b` for the full story.
 
-  const vis = e.visibility || 'all';
+5. **Deployment parameter `USER_BOT_PHONE`** — the Twilio WhatsApp number the bot receives on, formatted `+14436478971`. Every `codika deploy use-case` re-applies `defaultDeploymentParameters` from `config.ts`, so set the default there rather than relying on `codika redeploy --param`.
 
-  // Public and 'all' events visible to everyone
-  if (vis === 'public' || vis === 'all') return true;
+## What the deep guides cover that this landing doesn't
 
-  // Community & Residents events
-  if (vis === 'community_and_residents' && ['community', 'resident'].includes(callerRole)) return true;
+- Full `config.ts` skeleton with the minimum workflow set.
+- `main-router` node-by-node: trigger, phone parsing, DB lookup, role/bot dispatch, Codika Submit Result.
+- Handler skeleton: `executeWorkflowTrigger`, AI agent + Chat Memory + tool sub-workflows, sanitize + reply.
+- `sub-send-whatsapp` chunking pattern and WhatsApp formatting table.
+- **WhatsApp template provisioning** — the `http-provision-templates` + `sub-create-system-template` + `scheduled-template-status-check` trio, including `allow_category_change: false` (critical — without it Meta silently flips UTILITY → MARKETING at ~5× the cost) and the Meta variable-position rule.
+- Testing via `http-test-bot`, inspecting nested sub-workflow traces with `codika get execution --deep`.
+- WhatsApp-specific common errors with fixes.
 
-  // Residents-only events
-  if (vis === 'residents_only' && callerRole === 'resident') return true;
-
-  return false;
-});
-```
-
-### Standard Response Format
-
-**Success:**
-```json
-{
-  "success": true,
-  "message": "Operation completed",
-  "data": { ... }
-}
-```
-
-**Error:**
-```json
-{
-  "success": false,
-  "error": "Descriptive error message"
-}
-```
-
----
-
-## 5. Common Issues & Solutions
-
-### Issue: Tool parameters arrive as `null`
-
-**Symptom:** Sub-workflow receives `null` for parameters like `caller_role` or `caller_phone`.
-
-**Cause:** Using the broken `specifyInputSchema` + `fields.values` pattern.
-
-**Solution:** Switch to `workflowInputs` with `mappingMode: "defineBelow"`.
-
-### Issue: Events missing based on visibility
-
-**Symptom:** Users don't see events they should have access to (e.g., residents not seeing `residents_only` events).
-
-**Cause:** `caller_role` is `null` in the tool, so visibility filtering excludes role-specific events.
-
-**Solution:** Ensure `caller_role` is hardcoded in Parse Input and passed correctly to tools.
-
-### Issue: User identity not recognized
-
-**Symptom:** Tool says "User not found" even for registered users.
-
-**Cause:** `caller_phone` is `null` or incorrectly formatted.
-
-**Solution:**
-1. Verify `caller_phone` is passed from Parse Input
-2. Check phone format (with/without `+` prefix) - see Phone Number Storage section below
-3. Use `workflowInputs` pattern, not `fields.values`
-
----
-
-## 5.1 Phone Number Storage Pattern (CRITICAL)
-
-**Store phone numbers in database WITHOUT the `+` prefix, add `+` only when sending via Twilio.**
-
-### Why Not Store the `+`?
-
-The `+` character is special in URL query strings - it gets interpreted as a **space**!
-
-```
-❌ phone_number=eq.+32477047490  →  Interpreted as: phone_number=eq. 32477047490 (with space!)
-✅ phone_number=eq.32477047490   →  Works correctly
-```
-
-Supabase filter strings use URL encoding, so storing `+` creates query failures.
-
-### The Pattern
-
-| Operation | What to do | Code |
-|-----------|------------|------|
-| **Query database** | Strip `+` before querying | `.replace('+', '')` |
-| **Write to database** | Strip `+` before inserting | `.replace('+', '')` |
-| **Send to DB phone** | Add `+` prefix | `=+{{ $json.phone_number }}` |
-| **Reply to sender** | Use as-is (already has `+`) | `={{ $json.senderPhone }}` |
-
-### Code Examples
-
-**Database query (Supabase filter):**
-```javascript
-"filterString": "=phone_number=eq.{{ $json.caller_phone.replace('+', '') }}"
-```
-
-**Database write (message log):**
-```javascript
-{ "fieldId": "phone_number", "fieldValue": "={{ $json.senderPhone.replace('+', '') }}" }
-```
-
-**Twilio send to database phone (user from DB):**
-```javascript
-"to": "=+{{ $json.user.phone_number }}"
-```
-
-**Twilio reply to sender (already has `+`):**
-```javascript
-"to": "={{ $json.senderPhone }}"
-```
-
-### Key Distinction: Two Phone Sources
-
-| Source | Has `+`? | When sending via Twilio |
-|--------|----------|------------------------|
-| `senderPhone` (from Twilio trigger) | Yes | Use directly: `={{ $json.senderPhone }}` |
-| `phone_number` (from database) | No | Add prefix: `=+{{ $json.phone_number }}` |
-
-### Summary
-
-```
-Database stores:  32477047490     (no +)
-Twilio needs:     +32477047490    (with +)
-senderPhone:      +32477047490    (already has +)
-```
-
-**Rule:** Strip `+` for database operations, add `+` only at Twilio send boundary (when using DB phone numbers)
-
----
-
-## 6. WhatsApp Formatting
-
-WhatsApp uses different markdown than standard:
-
-| Format | WhatsApp Syntax | Standard Markdown |
-|--------|-----------------|-------------------|
-| Bold | `*text*` | `**text**` |
-| Italic | `_text_` | `*text*` |
-| Strikethrough | `~text~` | `~~text~~` |
-| Monospace | `` `text` `` | `` `text` `` |
-
-### Sanitize AI Output
-
-AI models often output standard markdown. Sanitize before sending:
-
-```javascript
-// Convert **bold** to *bold* (WhatsApp uses single asterisks)
-responseText = responseText.replace(/\*\*([^*]+)\*\*/g, '*$1*');
-
-// Remove markdown headers (# ## ###) - WhatsApp doesn't support them
-responseText = responseText.replace(/^#{1,6}\s+/gm, '');
-```
-
----
-
-## 7. Memory & Context
-
-### Buffer Window Memory
-
-Use `memoryBufferWindow` for conversation continuity:
-
-```json
-{
-  "parameters": {
-    "sessionIdType": "customKey",
-    "sessionKey": "={{ $('Parse Input').first().json.senderPhone }}",
-    "contextWindowLength": 20
-  },
-  "name": "Resident Memory",
-  "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-  "typeVersion": 1.3
-}
-```
-
-**Key:** Use phone number as session key for per-user conversation history.
-
-### Context Documents
-
-Fetch role-specific context documents from database:
-
-```javascript
-// In Parse Input, after fetching context document
-residentContext: contextDoc?.content_markdown || '',
-```
-
-Include in system prompt:
-```
-{{ $json.residentContext }}
-```
-
----
-
-## 8. Checklist for New WhatsApp Bot Tools
-
-When adding a new tool to a WhatsApp bot:
-
-- [ ] Tool sub-workflow has proper input validation
-- [ ] Tool returns `{ success: true/false, ... }` format
-- [ ] Handler Parse Input outputs all context needed by tool (`callerRole`, etc.)
-- [ ] Tool configuration uses `workflowInputs` pattern (NOT `fields.values`)
-- [ ] Context parameters (phone, role) are hardcoded from Parse Input
-- [ ] AI-provided parameters use `$fromAI()` syntax
-- [ ] Tool is connected to AI agent in handler
-- [ ] Tool description clearly explains when to use it
-
----
-
-## 9. Testing WhatsApp Bots
-
-### Test Each Role
-
-Test the same queries from different user roles:
-- Admin: Should see all events, can create/cancel
-- Resident: Should see `all` + `residents_only` events
-- Community: Should see `all` + `community_and_residents` events
-
-### Verify Tool Outputs
-
-Check n8n execution logs for:
-- Input parameters received by tools (not `null`)
-- Correct visibility filtering
-- Proper error messages returned
-
-### Common Test Cases
-
-1. "What events are coming up?" - Test visibility filtering
-2. "Register me for [event]" - Test caller_phone passing
-3. "What am I registered for?" - Test my_registrations tool
-4. "Submit a suggestion" - Test user lookup from phone
-
----
-
-## 10. Reference: WAT Community Bot Architecture
-
-```text
-main-router.json
-|-- handler-admin.json      (callerRole: 'admin')
-|-- handler-resident.json   (callerRole: 'resident')
-|-- handler-community.json  (callerRole: 'community')
-+-- handler-not-found.json
-
-Tools:
-|-- tool-list-events.json        (needs: caller_role)
-|-- tool-event-participation.json (needs: caller_phone, event_title, participating)
-|-- tool-my-registrations.json   (needs: caller_phone)
-|-- tool-event-creation.json     (needs: caller_phone + AI params)
-|-- tool-event-cancellation.json (needs: caller_phone + event_title)
-|-- tool-event-participants.json (needs: event_title only)
-|-- tool-faq-lookup.json         (needs: question only)
-|-- tool-submit-suggestion.json  (needs: caller_phone + content)
-|-- tool-list-suggestions.json   (needs: status_filter only)
-|-- tool-update-suggestion.json  (needs: AI params only - admin tool)
-+-- tool-notion-sync.json        (needs: caller_phone, twilio_phone)
-```
+Pick your pattern above and read the matching guide end-to-end before writing any workflow JSON.

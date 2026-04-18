@@ -75,13 +75,22 @@ Located in `references/integrations/`. Read when the use case involves a specifi
 
 **Instance (INSTCRED):** `supabase.md`, `postgres.md`
 
+### Use-Case Patterns
+
+End-to-end guides for recurring architectural shapes. Read the landing page first, then the matching deep guide.
+
+| Guide | Path | When to read |
+|-------|------|-------------|
+| **WhatsApp bots — landing** | `use-case/whatsapp-bots.md` | Start here — picks between the two WhatsApp architectures below |
+| **WhatsApp bots — multi-tenant** | `use-case/whatsapp-bots-multi-tenant.md` | One orchestrator process routes inbound WhatsApp by phone → separate per-client Codika processes (Bot Factory / `codika-client-bots` pattern). Use for multi-client SaaS. |
+| **WhatsApp bots — single-tenant** | `use-case/whatsapp-bots-single-tenant.md` | One Codika process with multiple role-based AI agent handlers (admin / resident / community / …) sharing one DB + one credential set (WAT pattern). Use for single-community bots. |
+
 ### Additional Resources
 
 | Resource | Path | Content |
 |----------|------|---------|
 | **Plan examples** | `plan-examples/` | Example build plans for reference |
 | **Common errors** | `post-creation/common-errors.md` | Common issues after creating workflows |
-| **WhatsApp bots** | `use-case/whatsapp-bots.md` | WhatsApp bot-specific patterns |
 
 ## Recommended Reading Order
 

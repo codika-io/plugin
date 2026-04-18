@@ -1051,4 +1051,77 @@ return results;
 
 ---
 
+## 14. WhatsApp-Specific Errors
+
+Three production-facing gotchas worth memorising when building any WhatsApp bot on this platform. Both the multi-tenant and single-tenant architectures have the same failure modes. See [whatsapp-bots.md](../use-case/whatsapp-bots.md) for architecture selection, then the matching deep guide ([whatsapp-bots-multi-tenant.md](../use-case/whatsapp-bots-multi-tenant.md) or [whatsapp-bots-single-tenant.md](../use-case/whatsapp-bots-single-tenant.md)) for full fix context.
+
+### Error: `null value in column "id" of relation "n8n_chat_histories" violates not-null constraint`
+
+**Symptom:**
+
+The bot always replies with its fallback error text ("Oops, I'm having a small technical issue…"). `codika get execution <id> --deep --slim --json` shows the above error inside a Postgres Chat Memory sub-node.
+
+**Cause:**
+
+The `n8n_chat_histories.id` column is `integer NOT NULL` with no identity sequence. n8n's `@n8n/n8n-nodes-langchain.memoryPostgresChat` does not supply an `id` on insert — it expects Postgres to auto-generate one. In Bot-Factory-descended schemas this worked only because n8n's `CREATE TABLE IF NOT EXISTS` fallback had created the table with IDENTITY first; when Drizzle `db:push` creates the table first from a schema missing `.generatedAlwaysAsIdentity()`, the broken shape persists.
+
+**Fix:**
+
+```sql
+ALTER TABLE n8n_chat_histories ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
+```
+
+Apply to both prod + dev branches. Also update `src/lib/db/schema.ts`:
+
+```ts
+id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+```
+
+See the matching WhatsApp guide §3 (prerequisites) for full context.
+
+---
+
+### Error: Welcome template silently reclassified `UTILITY → MARKETING`
+
+**Symptom:**
+
+You submitted a template with `category: 'UTILITY'`. After the daily status-check cron runs, `whatsapp_templates.category` shows `MARKETING` and your Twilio bill starts climbing ~5× faster than expected.
+
+**Cause:**
+
+Your `sub-create-system-template` workflow submits the Meta ApprovalRequest without `allow_category_change: false`. Twilio defaults `allow_category_change` to `true`, which lets Meta silently reclassify the template based on its auto-classifier reading the body. Invitational / greeting / "anytime" / "feel free to" language reliably scores MARKETING.
+
+**Fix:**
+
+In `sub-create-system-template.json`, the HTTP Request node that hits `POST /v1/Content/{sid}/ApprovalRequests`:
+
+```json
+"jsonBody": "={{ JSON.stringify({ name: $json.friendlyName, category: $json.category, allow_category_change: false }) }}"
+```
+
+Then delete the MARKETING row from `whatsapp_templates`, rewrite the body as transactional confirmation of a user action (e.g. "You've been added to {{2}} on Codika, {{1}}. This is your direct line for…"), redeploy the orchestrator, and re-trigger `http-provision-templates`. Meta will now either approve UTILITY as stated or reject outright — no silent flip.
+
+---
+
+### Error: `code=2388299 userMessage="Variables can't be at the start or end of the template"`
+
+**Symptom:**
+
+Meta rejects a template after the status-check poll. Rejection reason contains `code=2388299`.
+
+**Cause:**
+
+The template body begins or ends with a `{{n}}` variable. Meta's rule: variables must have non-variable text on at least one side — ideally both.
+
+**Fix:**
+
+Prefix or suffix the body with plain text:
+
+- BAD:  `{{1}}, tu as été ajouté à {{2}}…`
+- GOOD: `Bonjour {{1}}, tu as été ajouté à {{2}} sur Codika…`
+
+Delete the rejected row from `whatsapp_templates`, update the copy in the `SYSTEM_TEMPLATES` array inside `http-provision-templates.json`, redeploy, re-trigger provisioning.
+
+---
+
 *This document should be updated whenever new common errors are discovered. Include the error message, cause, and solution with code examples.*
