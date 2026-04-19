@@ -32,7 +32,7 @@ Then run `/codika:setup-codika` once per machine to complete authentication insi
 
 ## What's Inside
 
-One plugin, `codika`, with 25 skills + 4 autonomous agents.
+One plugin, `codika`, with 26 skills + 4 autonomous agents.
 
 ### Skills (`/codika:<skill>`)
 
@@ -41,7 +41,8 @@ Pure documentation-based skills that wrap the `codika` CLI. No code, no secrets.
 **Setup & auth**
 | Skill | What it does |
 |---|---|
-| `setup-codika` | Install the CLI and authenticate |
+| `auth-codika` | OTP-based CLI signup/login — agent provisions a fresh `cko_` API key from the terminal in two commands + a 6-digit code from email. No browser. Preferred for first-time setup. |
+| `setup-codika` | Install the CLI and manage profiles (switch, list, logout). Use when the user already has a `cko_` to paste, or for profile management. |
 | `discover-codika-guides` | Locate and list the bundled platform documentation |
 
 **Organizations & projects**

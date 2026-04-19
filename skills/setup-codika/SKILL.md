@@ -7,12 +7,15 @@ description: Installs the codika CLI and authenticates with the Codika platform.
 
 Install the `codika` CLI and authenticate with the Codika platform.
 
+> **For agents with email access: prefer the `auth-codika` skill.** It runs the OTP-based signup/login flow end-to-end and provisions a fresh `cko_` key from the terminal — no dashboard visit required. Use this `setup-codika` skill when the user already has a `cko_...` key to paste, when they don't have email access, or for pure profile management (switching, listing, logout).
+
 ## When to Use
 
 - The user wants to set up their environment for Codika
 - A deploy or project command fails with "API key is required"
 - First-time setup before using any other Codika skill
 - The user wants to check their current identity or switch between organizations
+- The user already has an API key they want to paste (for OTP provisioning, use `auth-codika`)
 
 ## Steps
 
