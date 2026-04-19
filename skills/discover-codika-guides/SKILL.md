@@ -1,6 +1,6 @@
 ---
 name: discover-codika-guides
-description: Locates the use-case-builder plugin's guides/ folder which contains all Codika platform documentation for building and debugging use cases. Use before reading any Codika documentation.
+description: Locates the codika plugin's bundled references/ folder which contains all Codika platform documentation for building and debugging use cases. Use before reading any Codika documentation.
 ---
 
 # Discover Codika Guides
@@ -12,7 +12,7 @@ The `discover-codika-guides` skill ships with a `references/` folder containing 
 The guides are bundled inside this skill's `references/` directory. Run these checks in order to find them:
 
 1. **Search for the skill's references** — Use Glob to find: `**/discover-codika-guides/references/use-case-guide.md`
-2. **Check common install paths** — Search for `**/use-case-builder/skills/discover-codika-guides/references/use-case-guide.md`
+2. **Check common install paths** — Search for `**/codika/skills/discover-codika-guides/references/use-case-guide.md` or `**/skills/discover-codika-guides/references/use-case-guide.md`
 
 Once found, store the `references/` base path and use it for all subsequent reads.
 

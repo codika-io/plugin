@@ -1,133 +1,111 @@
-# Codika Marketplace (Public)
+# Codika Plugin
 
-Public Claude Code plugin marketplace by Codika. Users install individual plugins to teach Claude Code agents how to work with the Codika platform.
+Public agent plugin for the Codika platform. Published as a single [Open Plugin v1](https://github.com/vercel-labs/open-plugin-spec)-conformant repo, installable via `npx plugins add codika-io/plugin` or Claude Code's `/plugin marketplace add` flow.
 
 ## Repository Structure
 
-This is a **marketplace** — it contains multiple independent plugins, each with its own `.claude-plugin/plugin.json`, skills, and (optionally) agents, commands, and hooks.
+The repo root IS the plugin root — no `plugins/` wrapper, no marketplace layer. This matches `vercel/vercel-plugin` and `slideless-ai/plugin`, the recommended Open Plugin layout for single-plugin repos.
 
 ```
 .
+├── .plugin/
+│   └── plugin.json                       # Vendor-neutral manifest (Open Plugin v1)
 ├── .claude-plugin/
-│   └── marketplace.json          # Marketplace catalog
-├── plugins/
-│   ├── codika/                   # CLI helper plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json
-│   │   └── skills/
-│   │       ├── setup-codika/
-│   │       ├── create-project/
-│   │       ├── create-organization/
-│   │       ├── create-organization-key/
-│   │       ├── deploy-use-case/
-│   │       ├── deploy-data-ingestion/
-│   │       ├── deploy-documents/
-│   │       ├── publish-use-case/
-│   │       ├── redeploy-use-case/
-│   │       ├── verify-use-case/
-│   │       ├── manage-integrations/
-│   │       ├── list-projects/
-│   │       ├── get-project/
-│   │       └── update-organization-key/
-│   └── use-case-builder/         # Autonomous use case agents
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       ├── agents/
-│       │   ├── use-case-builder.md
-│       │   ├── use-case-modifier.md
-│       │   ├── n8n-workflow-builder.md
-│       │   └── use-case-tester.md
-│       └── skills/
-│           └── discover-codika-guides/
-│               ├── SKILL.md
-│               └── references/   # Bundled platform documentation
-│                   ├── use-case-guide.md
-│                   ├── specific/         # 11 implementation guides
-│                   └── integrations/     # 19 integration guides
+│   └── plugin.json                       # Vendor-prefixed manifest (preferred by Claude Code)
+├── skills/                               # 25 skills, all namespaced as `/codika:<name>`
+│   ├── setup-codika/
+│   ├── create-organization/
+│   ├── create-organization-key/
+│   ├── update-organization-key/
+│   ├── create-project/
+│   ├── list-projects/
+│   ├── get-project/
+│   ├── init-use-case/
+│   ├── verify-use-case/
+│   ├── deploy-use-case/
+│   ├── redeploy-use-case/
+│   ├── publish-use-case/
+│   ├── fetch-use-case/
+│   ├── deploy-documents/
+│   ├── deploy-data-ingestion/
+│   ├── trigger-workflow/
+│   ├── get-execution/
+│   ├── list-executions/
+│   ├── list-instances/
+│   ├── get-instance/
+│   ├── instance-activate/
+│   ├── manage-integrations/
+│   ├── manage-notes/
+│   ├── get-skills/
+│   └── discover-codika-guides/
+│       ├── SKILL.md
+│       └── references/                   # Bundled platform docs
+│           ├── use-case-guide.md
+│           ├── specific/                 # 11 implementation guides
+│           ├── integrations/             # 19 integration guides
+│           ├── use-case/                 # Use case examples
+│           └── plan-examples/
+├── agents/                               # 4 agents, invokable as Task subagent_type `codika:<name>`
+│   ├── use-case-builder.md
+│   ├── use-case-modifier.md
+│   ├── n8n-workflow-builder.md
+│   └── use-case-tester.md
 ├── README.md
 ├── CLAUDE.md
-└── LICENSE
+├── SECURITY.md
+├── LICENSE
+└── .gitignore
 ```
 
-## Plugins
+## Manifests
 
-### codika (`plugins/codika/`)
+Two manifests are kept intentionally in sync:
 
-Skills for the `codika` CLI (`codika`). Pure documentation — no code, no dependencies, no secrets.
+- `.plugin/plugin.json` — canonical Open Plugin v1 manifest. Read by `npx plugins`, Cursor, and any other Open-Plugin-compatible host.
+- `.claude-plugin/plugin.json` — Claude Code vendor-prefixed manifest. Per Open Plugin §5.1, Claude Code prefers this when both are present.
 
-| Skill | Description |
-|-------|-------------|
-| `setup-codika` | Install the CLI globally and run `codika login` |
-| `create-project` | Create a project via `codika project create` |
-| `create-organization` | Create an organization via `codika organization create` |
-| `create-organization-key` | Create an organization API key via `codika organization create-key` |
-| `deploy-use-case` | Validate then deploy via `codika verify` + `codika deploy` |
-| `deploy-data-ingestion` | Deploy data ingestion config via `codika deploy process-data-ingestion` |
-| `deploy-documents` | Upload stage documents via `codika deploy documents` |
-| `publish-use-case` | Publish a deployment to production via `codika publish` |
-| `redeploy-use-case` | Redeploy with parameter changes via `codika redeploy` |
-| `verify-use-case` | Validate workflows via `codika verify use-case` |
-| `init-use-case` | Scaffold a new use case via `codika init` |
-| `fetch-use-case` | Download a deployed use case via `codika get use-case` |
-| `trigger-workflow` | Trigger a workflow via `codika trigger` |
-| `get-execution` | Fetch execution details via `codika get execution` |
-| `get-instance` | Fetch instance details via `codika get instance` |
-| `list-executions` | List recent executions via `codika list executions` |
-| `list-instances` | List all process instances via `codika list instances` |
-| `list-projects` | List all projects via `codika list projects` |
-| `get-project` | Fetch project details via `codika get project` |
-| `instance-activate` | Activate or deactivate instances via `codika instance activate/deactivate` |
-| `manage-integrations` | Manage integrations (set, list, delete) via `codika integration` |
-| `update-organization-key` | Update an organization API key via `codika organization update-key` |
+When editing manifest metadata (`version`, `description`, `keywords`, …), update BOTH files. Both ship the same schema.
 
-### use-case-builder (`plugins/use-case-builder/`)
+## History
 
-Autonomous agents that read platform documentation to design, build, test, and deploy Codika use cases. The user provides a goal — the agents study the guides to figure out the best architecture. Requires the `codika` plugin for CLI skills.
-
-All platform documentation is bundled in the `discover-codika-guides` skill's `references/` folder (main use-case guide, 11 specific guides, 19 integration guides, plan examples, common errors). Agents use the skill to discover and read these guides at runtime.
-
-**Agents:**
-
-| Agent | Description |
-|-------|-------------|
-| `use-case-builder` | Reads platform documentation, designs the architecture from user requirements, creates config.ts, delegates workflow creation, validates |
-| `use-case-modifier` | Reads and understands an existing use case (config.ts + all workflows), reads the docs, then makes targeted modifications |
-| `n8n-workflow-builder` | Builds individual n8n workflow JSON files following Codika patterns. Called by builder/modifier or directly |
-| `use-case-tester` | Runs deploy-trigger-inspect-fix loops to test and debug use cases automatically |
-
-**Skills:**
-
-| Skill | Description |
-|-------|-------------|
-| `discover-codika-guides` | Locates the codika-processes-lib repository and lists available documentation guides |
-
-**Dependency:** Users must also install the `codika` plugin — the agents use its CLI skills (deploy, verify, trigger, get-execution, etc.).
+Until v2.0.0 this repo was a two-plugin marketplace (`codika` + `use-case-builder`). Merged in 2026-04 following the `vercel/vercel-plugin` + `slideless-ai/plugin` single-plugin pattern. The 4 `use-case-builder` agents and the `discover-codika-guides` skill moved into the unified `codika` plugin — every skill and agent is now namespaced `/codika:*`.
 
 ## Conventions
 
-- Skills must not contain secrets, API keys, or internal URLs
-- Skills should reference CLI commands and flags, not internal implementation details
-- Skills should guide agents to use `setup-codika` when authentication fails
-- Keep SKILL.md files self-contained — each should work independently
-- Each plugin gets its own directory under `plugins/` with its own `.claude-plugin/plugin.json`
+- Skills must not contain secrets, API keys, or internal URLs.
+- Skills should reference CLI commands and flags, not internal implementation details.
+- Skills should guide agents to use `setup-codika` when authentication fails.
+- Keep SKILL.md files self-contained — each should work independently.
+- Agents (autonomous Task-invocable) live in `agents/<name>.md`. Skills (slash-command, interactive) live in `skills/<name>/SKILL.md`.
 
-## Adding a New Plugin
+## Adding a New Skill
 
-1. Create `plugins/<plugin-name>/.claude-plugin/plugin.json`
-2. Add skills under `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`
-3. Register the plugin in `.claude-plugin/marketplace.json` under the `plugins` array
-4. Update README.md with the new plugin's documentation
+1. Create `skills/<skill-name>/SKILL.md` with YAML frontmatter (`name`, `description`).
+2. The plugin loader picks it up automatically from the default `skills/` discovery location (Open Plugin §7.1) — no manifest edits needed.
+3. Document it in `README.md`.
+
+## Adding a New Agent
+
+1. Create `agents/<agent-name>.md` with YAML frontmatter (`name`, `description`, optional `tools`).
+2. The agent is immediately invokable via Task with `subagent_type: "codika:<agent-name>"`.
+3. Document it in `README.md`.
+
+## Versioning
+
+Follow semantic versioning. Breaking changes (skill rename, agent rename, skill/agent removal, manifest name change) require a major bump and a note in the README's History section. Additive changes (new skills, new agents, new references docs) only need a minor bump.
 
 ## Testing
 
 ```bash
-# Add this marketplace
-/plugin marketplace add codika-io/codika-marketplace
+# Test local install against any Open-Plugin-compatible host:
+npx plugins add /Users/romainpattyn/.codika/core/app/codika-plugin
 
-# Install a plugin
-/plugin install codika@codika-marketplace
+# Or Claude Code native (from this repo once pushed):
+/plugin marketplace add codika-io/plugin
+/plugin install codika@plugin
 
-# Skills are namespaced
+# All skills/agents namespaced as /codika:*
 /codika:setup-codika
 /codika:deploy-use-case
+# Task tool subagent_type: "codika:use-case-builder"
 ```

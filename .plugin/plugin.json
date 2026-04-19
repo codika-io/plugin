@@ -1,0 +1,23 @@
+{
+  "name": "codika",
+  "version": "2.0.0",
+  "description": "Skills + autonomous agents for the Codika platform — CLI helpers (auth, projects, use cases, execution) plus agents that design, build, test, and deploy Codika use cases from natural-language requirements.",
+  "author": {
+    "name": "Codika",
+    "email": "team@codika.io",
+    "url": "https://codika.io"
+  },
+  "homepage": "https://docs.codika.io",
+  "repository": "https://github.com/codika-io/plugin",
+  "license": "MIT",
+  "keywords": [
+    "codika",
+    "n8n",
+    "workflow",
+    "use-case",
+    "deployment",
+    "agent",
+    "automation",
+    "cli"
+  ]
+}

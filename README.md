@@ -1,74 +1,102 @@
-# Codika Marketplace
+# Codika Plugin
 
-Public Claude Code plugin marketplace by [Codika](https://codika.io). Install plugins to let Claude Code agents create projects, deploy use cases, and manage workflows on the Codika platform.
+Official agent plugin for the [Codika](https://codika.io) platform. Installs CLI skills + autonomous builder agents so any compatible coding agent (Claude Code, Cursor, …) can create projects, design n8n workflows, deploy use cases, and manage the platform end-to-end.
 
-## Quick Start
+Conforms to the [Open Plugin Specification v1.0](https://github.com/vercel-labs/open-plugin-spec).
 
-### 1. Add the Marketplace
+## Install
 
-```
-/plugin marketplace add codika-io/codika-marketplace
-```
+### Any Open-Plugin-compatible host (Claude Code, Cursor, …)
 
-### 2. Install a Plugin
-
-```
-/plugin install codika@codika-marketplace
+```bash
+npx plugins add codika-io/plugin
 ```
 
-### 3. Install the CLI
+The `plugins` CLI auto-detects which agent tools are installed and installs to all of them.
+
+### Claude Code (native)
+
+```
+/plugin marketplace add codika-io/plugin
+/plugin install codika@plugin
+```
+
+### CLI (required for deployment skills)
 
 ```bash
 npm install -g codika
 codika login
 ```
 
-## Available Plugins
+Then run `/codika:setup-codika` once per machine to complete authentication inside the agent.
 
-| Plugin | Description | Type |
-|--------|-------------|------|
-| `codika` | CLI skills for creating projects, deploying and validating use cases, managing integrations | Skills |
-| `use-case-builder` | Autonomous agents that read docs to design, build, test, and deploy use cases from requirements | Agents |
+## What's Inside
 
-## Plugin: codika
+One plugin, `codika`, with 25 skills + 4 autonomous agents.
 
-Skills for the `codika` CLI. Once installed, Claude Code agents can:
+### Skills (`/codika:<skill>`)
 
+Pure documentation-based skills that wrap the `codika` CLI. No code, no secrets.
+
+**Setup & auth**
 | Skill | What it does |
-|-------|-------------|
-| `codika:setup-codika` | Install the CLI and authenticate |
-| `codika:create-project` | Create a new project on the platform |
-| `codika:create-organization` | Create a new organization on the platform |
-| `codika:create-organization-key` | Create an organization API key for deployment and management |
-| `codika:deploy-use-case` | Validate and deploy a use case |
-| `codika:redeploy-use-case` | Redeploy an instance with different parameters |
-| `codika:verify-use-case` | Validate workflows without deploying |
-| `codika:manage-integrations` | Configure, list, and delete integrations (API keys, credentials) |
+|---|---|
+| `setup-codika` | Install the CLI and authenticate |
+| `discover-codika-guides` | Locate and list the bundled platform documentation |
 
-## Plugin: use-case-builder
+**Organizations & projects**
+| Skill | What it does |
+|---|---|
+| `create-organization` | Create a new organization |
+| `create-organization-key` | Create an organization API key |
+| `update-organization-key` | Update an organization API key |
+| `create-project` | Create a new project |
+| `list-projects` | List all projects |
+| `get-project` | Fetch project details |
 
-Autonomous agents that read platform documentation to design, build, test, and fix Codika use cases. The user provides a goal — the agents study the guides to figure out the best architecture. Requires the `codika` plugin (agents use its CLI skills).
+**Use cases — build & deploy**
+| Skill | What it does |
+|---|---|
+| `init-use-case` | Scaffold a new use case |
+| `verify-use-case` | Validate workflows without deploying |
+| `deploy-use-case` | Validate then deploy via `codika verify` + `codika deploy` |
+| `redeploy-use-case` | Redeploy with parameter changes |
+| `publish-use-case` | Publish a deployment to production |
+| `fetch-use-case` | Download a deployed use case |
+| `deploy-documents` | Upload stage documents |
+| `deploy-data-ingestion` | Deploy data ingestion config |
 
-```
-/plugin install use-case-builder@codika-marketplace
-```
+**Execution & operations**
+| Skill | What it does |
+|---|---|
+| `trigger-workflow` | Trigger a workflow |
+| `get-execution` | Fetch execution details |
+| `list-executions` | List recent executions |
+| `list-instances` | List all process instances |
+| `get-instance` | Fetch instance details |
+| `instance-activate` | Activate or deactivate instances |
+| `manage-integrations` | Configure, list, and delete integrations |
+| `manage-notes` | Manage project notes |
+| `get-skills` | List available platform skills |
 
-**Agents:**
+### Agents (`Task` subagent_type `codika:<agent>`)
+
+Autonomous agents that read the bundled platform documentation to design, build, test, and debug Codika use cases. The user provides a goal — the agents study the guides to figure out the best architecture.
 
 | Agent | What it does |
-|-------|-------------|
-| `use-case-builder` | Reads platform documentation, designs architecture from user requirements, creates config.ts, delegates workflow creation, validates |
-| `use-case-modifier` | Reads and understands an existing use case, reads the docs, then makes targeted modifications (add workflows, change triggers, add integrations) |
-| `n8n-workflow-builder` | Builds individual n8n workflow JSON files following Codika patterns (called by builder/modifier or directly) |
-| `use-case-tester` | Runs automated deploy-trigger-inspect-fix loops to test and debug use cases |
+|---|---|
+| `use-case-builder` | Reads documentation, designs architecture from requirements, creates `config.ts`, delegates workflow creation, validates |
+| `use-case-modifier` | Reads an existing use case (config.ts + all workflows), reads docs, makes targeted modifications |
+| `n8n-workflow-builder` | Builds individual n8n workflow JSON files following Codika patterns |
+| `use-case-tester` | Runs deploy-trigger-inspect-fix loops to test and debug use cases automatically |
 
-**Usage:**
-- "Create a use case for invoice processing with PDF upload and AI extraction" → triggers `use-case-builder`
-- "Add a Slack notification to the invoice-processor use case" → triggers `use-case-modifier`
-- "Build an HTTP-triggered workflow for document classification" → triggers `n8n-workflow-builder`
-- "Test and fix the invoice-processor use case" → triggers `use-case-tester`
+**Usage examples:**
+- "Create a use case for invoice processing with PDF upload and AI extraction" → invokes `codika:use-case-builder`
+- "Add a Slack notification to the invoice-processor use case" → invokes `codika:use-case-modifier`
+- "Build an HTTP-triggered workflow for document classification" → invokes `codika:n8n-workflow-builder`
+- "Test and fix the invoice-processor use case" → invokes `codika:use-case-tester`
 
-**Self-contained:** The plugin ships with all platform documentation (`guides/` folder). No need to clone `codika-processes-lib` — agents read the bundled guides directly.
+**Self-contained:** All platform documentation ships with the plugin under `skills/discover-codika-guides/references/` (main use-case guide + 11 specific guides + 19 integration guides + plan examples). Agents read these directly — no need to clone `codika-processes-lib`.
 
 ## What is Codika?
 
@@ -76,7 +104,7 @@ Codika is a multi-tenant SaaS platform for building, deploying, and managing bus
 
 ## Contributing
 
-See `CLAUDE.md` for conventions and instructions on adding new plugins.
+See `CLAUDE.md` for conventions and instructions on adding new skills or agents.
 
 ## License
 
