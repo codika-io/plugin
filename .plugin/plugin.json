@@ -1,6 +1,6 @@
 {
   "name": "codika",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Skills + autonomous agents for the Codika platform — CLI helpers (auth, projects, use cases, execution) plus agents that design, build, test, and deploy Codika use cases from natural-language requirements.",
   "author": {
     "name": "Codika",
